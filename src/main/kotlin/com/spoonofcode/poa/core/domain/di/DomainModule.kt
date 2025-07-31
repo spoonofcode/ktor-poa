@@ -11,9 +11,8 @@ val domainModule = module {
     factoryOf(::RegisterUseCase)
     factoryOf(::GetAllRolesByUserIdUseCase)
     factoryOf(::GetAllUsersByRoleIdUseCase)
-    factoryOf(::GetSportEventsUserParticipatedInUseCase)
-    factoryOf(::GetSportEventsCreatedByUserUseCase)
-    factoryOf(::AddUserToSportEventUseCase)
+    factoryOf(::GetProductsOwnedByUserUseCase)
     factoryOf(::AddRoleToUserUseCase)
+    factoryOf(::AddProductToUserUseCase)
     factoryOf(::SendMessageFCMUseCase)
 }

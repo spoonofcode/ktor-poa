@@ -25,8 +25,8 @@ fun Route.roles(
                 paramName = "userId",
             ) { userId ->
                 call.safeRespond {
-                    val sportEventsByCreatorRoleId = getAllRolesByUserIdUseCase(userId = userId)
-                    call.respond(HttpStatusCode.OK, sportEventsByCreatorRoleId)
+                    val rolesByUserId = getAllRolesByUserIdUseCase(userId = userId)
+                    call.respond(HttpStatusCode.OK, rolesByUserId)
                 }
             }
         }

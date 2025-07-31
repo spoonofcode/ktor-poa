@@ -1,6 +1,6 @@
 package com.spoonofcode.poa.core.domain
 
-import com.spoonofcode.poa.core.data.repository.SportEventRepository
+import com.spoonofcode.poa.core.data.repository.ProductRepository
 import com.spoonofcode.poa.core.data.repository.UserRepository
 import com.spoonofcode.poa.core.model.Profile
 import com.spoonofcode.poa.core.model.UserResponse
@@ -8,17 +8,15 @@ import com.spoonofcode.poa.feature.profile.ProfileResult
 
 class GetProfileUseCase(
     private val userRepository: UserRepository,
-    private val sportEventRepository: SportEventRepository,
+    private val productRepository: ProductRepository,
 ) {
     suspend operator fun invoke(userId: Int): ProfileResult {
         val user = userRepository.read(id = userId) ?: return ProfileResult.UserNotFound
-        val numberOfEventsCreatedByUser = sportEventRepository.countByCreatorUserId(userId)
-        val numberOfEventsUserParticipatedIn = userRepository.countSportEventsInWhichTheUserParticipates(userId)
+        val numberOfProductsCreatedByUser = productRepository.countByOwnerUserId(userId)
         return ProfileResult.Success(
             Profile(
                 name = getFullName(user = user),
-                numberOfEventsCreatedByUser = numberOfEventsCreatedByUser,
-                numberOfEventsUserParticipatedIn = numberOfEventsUserParticipatedIn,
+                numberOfProductsCreatedByUser = numberOfProductsCreatedByUser,
             )
         )
     }
