@@ -2,7 +2,7 @@ package com.spoonofcode.poa.core.domain
 
 import com.spoonofcode.poa.core.base.utils.PasswordUtil
 import com.spoonofcode.poa.core.data.repository.UserRepository
-import com.spoonofcode.poa.core.model.LoginResponse
+import com.spoonofcode.poa.core.model.Login
 import com.spoonofcode.poa.core.network.JwtConfig
 import com.spoonofcode.poa.feature.login.login.LoginResult
 
@@ -30,7 +30,7 @@ class LoginUseCase(
         )
 
         return LoginResult.Success(
-            LoginResponse(
+            Login(
                 userId = existingUser.id,
                 jwtAccessToken = jwtAccessToken,
                 jwtRefreshToken = jwtRefreshToken,

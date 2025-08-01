@@ -4,13 +4,13 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.id.IntIdTable
 
 @Serializable
-data class RoleRequest(
+data class Role(
+    val id: Int,
     val name: String,
 )
 
 @Serializable
-data class RoleResponse(
-    val id: Int,
+data class RoleRequest(
     val name: String,
 )
 

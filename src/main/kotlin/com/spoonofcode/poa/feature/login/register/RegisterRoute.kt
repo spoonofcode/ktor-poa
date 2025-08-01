@@ -24,7 +24,7 @@ fun Route.register(registerUseCase: RegisterUseCase = get()) {
                         )
                     )) {
                         is RegisterResult.Success -> {
-                            call.respond(HttpStatusCode.OK, result.registerResponse)
+                            call.respond(HttpStatusCode.OK, result.register)
                         }
 
                         RegisterResult.UserAlreadyExist -> {

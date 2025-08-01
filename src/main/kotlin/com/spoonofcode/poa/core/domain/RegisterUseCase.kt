@@ -2,7 +2,7 @@ package com.spoonofcode.poa.core.domain
 
 import com.spoonofcode.poa.core.base.utils.PasswordUtil
 import com.spoonofcode.poa.core.data.repository.UserRepository
-import com.spoonofcode.poa.core.model.RegisterResponse
+import com.spoonofcode.poa.core.model.Register
 import com.spoonofcode.poa.core.model.UserRequest
 import com.spoonofcode.poa.core.network.JwtConfig
 import com.spoonofcode.poa.feature.login.register.RegisterResult
@@ -36,7 +36,7 @@ class RegisterUseCase(
         )
 
         return RegisterResult.Success(
-            RegisterResponse(
+            Register(
                 userId = newUser.id,
                 jwtAccessToken = jwtAccessToken,
                 jwtRefreshToken = jwtRefreshToken

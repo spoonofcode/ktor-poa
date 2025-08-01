@@ -8,7 +8,6 @@ import com.spoonofcode.poa.core.base.routes.crudRoute
 import com.spoonofcode.poa.core.data.repository.UserRepository
 import com.spoonofcode.poa.core.domain.AddRoleToUserUseCase
 import com.spoonofcode.poa.core.domain.GetAllUsersByRoleIdUseCase
-import com.spoonofcode.poa.core.domain.GetSportEventsUserParticipatedInUseCase
 import com.spoonofcode.poa.core.model.AddRoleToUserRequest
 import io.ktor.http.*
 import io.ktor.server.response.*
@@ -18,7 +17,6 @@ import org.koin.ktor.ext.get
 fun Route.users(
     userRepository: UserRepository = get(),
     getAllUsersByRoleIdUseCase: GetAllUsersByRoleIdUseCase = get(),
-    getSportEventsUserParticipatedInUseCase: GetSportEventsUserParticipatedInUseCase = get(),
     addRoleToUserUseCase: AddRoleToUserUseCase = get(),
 ) {
     val basePath = "/users"
@@ -32,20 +30,8 @@ fun Route.users(
                 paramName = "roleId",
             ) { roleId ->
                 call.safeRespond {
-                    val sportEventsByCreatorUserId = getAllUsersByRoleIdUseCase(roleId = roleId)
-                    call.respond(HttpStatusCode.OK, sportEventsByCreatorUserId)
-                }
-            }
-        }
-
-        get("/{userId}/sportEvents") {
-            call.withValidParameter(
-                paramName = "userId",
-                parser = String::toIntOrNull
-            ) { userId ->
-                call.safeRespond {
-                    val sportEvents = getSportEventsUserParticipatedInUseCase(userId = userId)
-                    call.respond(HttpStatusCode.OK, sportEvents)
+                    val usersByRoleId = getAllUsersByRoleIdUseCase(roleId = roleId)
+                    call.respond(HttpStatusCode.OK, usersByRoleId)
                 }
             }
         }
