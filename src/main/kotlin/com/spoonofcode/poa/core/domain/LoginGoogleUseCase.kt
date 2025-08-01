@@ -4,7 +4,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.http.apache.v2.ApacheHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.spoonofcode.poa.core.data.repository.UserRepository
-import com.spoonofcode.poa.core.model.LoginGoogleResponse
+import com.spoonofcode.poa.core.model.LoginGoogle
 import com.spoonofcode.poa.core.model.UserRequest
 import com.spoonofcode.poa.core.network.JwtConfig
 import com.spoonofcode.poa.feature.login.login.LoginGoogleResult
@@ -46,7 +46,7 @@ class LoginGoogleUseCase(
                 )
 
                 return LoginGoogleResult.Success(
-                    LoginGoogleResponse(
+                    LoginGoogle(
                         userId = existingUser.id,
                         jwtAccessToken = jwtAccessToken,
                         jwtRefreshToken = jwtRefreshToken,
@@ -77,7 +77,7 @@ class LoginGoogleUseCase(
                 )
 
                 return LoginGoogleResult.Success(
-                    LoginGoogleResponse(
+                    LoginGoogle(
                         userId = newUser.id,
                         jwtAccessToken = jwtAccessToken,
                         jwtRefreshToken = jwtRefreshToken,

@@ -1,14 +1,14 @@
 package com.spoonofcode.poa.core.data.repository
 
 import com.spoonofcode.poa.core.base.repository.GenericCrudRepository
+import com.spoonofcode.poa.core.model.User
 import com.spoonofcode.poa.core.model.UserRequest
-import com.spoonofcode.poa.core.model.UserResponse
 import com.spoonofcode.poa.core.model.UserRoles
 import com.spoonofcode.poa.core.model.Users
 import com.spoonofcode.poa.plugins.dbQuery
 import org.jetbrains.exposed.sql.selectAll
 
-class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
+class UserRepository : GenericCrudRepository<Users, UserRequest, User>(
     table = Users,
     toResultRow = { request ->
         mapOf(
@@ -22,7 +22,7 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
         )
     },
     toResponse = { row ->
-        UserResponse(
+        User(
             id = row[Users.id].value,
             firstName = row[Users.firstName],
             lastName = row[Users.lastName],
@@ -31,13 +31,13 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
         )
     }
 ) {
-    suspend fun readByEmail(email: String): UserResponse? {
+    suspend fun readByEmail(email: String): User? {
         return dbQuery {
             Users.selectAll().where { Users.email eq email }.map { toResponse(it) }
         }.firstOrNull()
     }
 
-    suspend fun readAllUserByRoleId(roleId: Int): List<UserResponse> {
+    suspend fun readAllUserByRoleId(roleId: Int): List<User> {
         return dbQuery {
             (Users innerJoin UserRoles)
                 .selectAll().where { UserRoles.roleId eq roleId }.map(toResponse)

@@ -14,7 +14,7 @@ data class ProductRequest(
 )
 
 @Serializable
-data class ProductResponse(
+data class Product(
     val id: Int,
     val name: String,
     val description: String,
@@ -22,7 +22,7 @@ data class ProductResponse(
     val collectionName: String,
     val websiteLink: String? = null,
     val customLink: String? = null,
-    val ownerUser: UserResponse,
+    val ownerUser: User,
 )
 
 object Products : IntIdTable() {

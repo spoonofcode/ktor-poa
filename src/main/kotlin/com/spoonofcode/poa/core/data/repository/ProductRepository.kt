@@ -6,7 +6,7 @@ import com.spoonofcode.poa.plugins.dbQuery
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.selectAll
 
-class ProductRepository : GenericCrudRepository<Products, ProductRequest, ProductResponse>(
+class ProductRepository : GenericCrudRepository<Products, ProductRequest, Product>(
     table = Products,
     leftJoinTables = listOf(Users),
     toResultRow = { request ->
@@ -20,7 +20,7 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
         )
     },
     toResponse = { row ->
-        ProductResponse(
+        Product(
             id = row[Products.id].value,
             name = row[Products.name],
             description = row[Products.description],
@@ -28,7 +28,7 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
             collectionName = row[Products.collectionName],
             websiteLink = row[Products.websiteLink],
             customLink = row[Products.customLink],
-            ownerUser = UserResponse(
+            ownerUser = User(
                 id = row[Users.id].value,
                 firstName = row[Users.firstName],
                 lastName = row[Users.lastName],
@@ -38,7 +38,7 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
         )
     }
 ) {
-    suspend fun readByOwnerUserId(ownerUserId: Int): List<ProductResponse> {
+    suspend fun readByOwnerUserId(ownerUserId: Int): List<Product> {
         return dbQuery {
             Products
                 .leftJoin(Users)

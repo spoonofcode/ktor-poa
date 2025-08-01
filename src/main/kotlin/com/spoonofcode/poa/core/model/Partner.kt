@@ -16,7 +16,7 @@ data class PartnerRequest(
 )
 
 @Serializable
-data class PartnerResponse(
+data class Partner(
     val id: Int,
     val name: String,
     val description: String,

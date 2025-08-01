@@ -3,7 +3,7 @@ package com.spoonofcode.poa.core.domain
 import com.spoonofcode.poa.core.data.repository.ProductRepository
 import com.spoonofcode.poa.core.data.repository.UserRepository
 import com.spoonofcode.poa.core.model.Profile
-import com.spoonofcode.poa.core.model.UserResponse
+import com.spoonofcode.poa.core.model.User
 import com.spoonofcode.poa.feature.profile.ProfileResult
 
 class GetProfileUseCase(
@@ -16,12 +16,12 @@ class GetProfileUseCase(
         return ProfileResult.Success(
             Profile(
                 name = getFullName(user = user),
-                numberOfProductsCreatedByUser = numberOfProductsCreatedByUser,
+                numberOfProductsOwnedByUser = numberOfProductsCreatedByUser,
             )
         )
     }
 
-    private fun getFullName(user: UserResponse): String = buildString {
+    private fun getFullName(user: User): String = buildString {
         append("${user.firstName} ${user.lastName}")
         user.nickName?.let { append(" ($it)") }
     }

@@ -11,7 +11,7 @@ data class RegisterRequest(
 )
 
 @Serializable
-data class RegisterResponse(
+data class Register(
     val userId: Int,
     val jwtAccessToken: String,
     val jwtRefreshToken: String,

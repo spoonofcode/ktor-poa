@@ -9,7 +9,7 @@ data class LoginRequest(
 )
 
 @Serializable
-data class LoginResponse(
+data class Login(
     val userId: Int,
     val jwtAccessToken: String,
     val jwtRefreshToken: String,
