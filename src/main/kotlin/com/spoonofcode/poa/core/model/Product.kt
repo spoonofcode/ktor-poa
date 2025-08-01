@@ -4,16 +4,6 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.id.IntIdTable
 
 @Serializable
-data class ProductRequest(
-    val name: String,
-    val description: String,
-    val collectionName: String,
-    val websiteLink: String? = null,
-    val customLink: String? = null,
-    val ownerUserId: Int,
-)
-
-@Serializable
 data class Product(
     val id: Int,
     val name: String,
@@ -23,6 +13,16 @@ data class Product(
     val websiteLink: String? = null,
     val customLink: String? = null,
     val ownerUser: User,
+)
+
+@Serializable
+data class ProductRequest(
+    val name: String,
+    val description: String,
+    val collectionName: String,
+    val websiteLink: String? = null,
+    val customLink: String? = null,
+    val ownerUserId: Int,
 )
 
 object Products : IntIdTable() {

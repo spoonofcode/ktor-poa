@@ -4,18 +4,6 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.id.IntIdTable
 
 @Serializable
-data class PartnerRequest(
-    val name: String,
-    val description: String,
-    val websiteLink: String? = null,
-    val instagramLink: String? = null,
-    val facebookLink: String? = null,
-    val youtubeLink: String? = null,
-    val xLink: String? = null,
-    val userId: Int,
-)
-
-@Serializable
 data class Partner(
     val id: Int,
     val name: String,
@@ -25,6 +13,18 @@ data class Partner(
     val facebookLink: String? = null,
     val youtubeLink: String? = null,
     val xLink: String? = null,
+)
+
+@Serializable
+data class PartnerRequest(
+    val name: String,
+    val description: String,
+    val websiteLink: String? = null,
+    val instagramLink: String? = null,
+    val facebookLink: String? = null,
+    val youtubeLink: String? = null,
+    val xLink: String? = null,
+    val userId: Int,
 )
 
 object Partners : IntIdTable() {

@@ -4,6 +4,15 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.id.IntIdTable
 
 @Serializable
+data class User(
+    val id: Int,
+    val firstName: String,
+    val lastName: String,
+    val nickName: String? = null,
+    val email: String,
+)
+
+@Serializable
 data class UserRequest(
     val firstName: String,
     val lastName: String,
@@ -12,15 +21,6 @@ data class UserRequest(
     val password: String? = null,
     val provider: String? = null,
     val providerId: String? = null,
-)
-
-@Serializable
-data class User(
-    val id: Int,
-    val firstName: String,
-    val lastName: String,
-    val nickName: String? = null,
-    val email: String,
 )
 
 object Users : IntIdTable() {
