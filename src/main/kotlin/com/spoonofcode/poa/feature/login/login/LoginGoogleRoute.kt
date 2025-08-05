@@ -2,7 +2,7 @@ package com.spoonofcode.poa.feature.login.login
 
 import com.spoonofcode.poa.core.base.ext.safeRespond
 import com.spoonofcode.poa.core.base.ext.withValidBody
-import com.spoonofcode.poa.core.domain.LoginGoogleUseCase
+import com.spoonofcode.poa.core.domain.login.LoginGoogleUseCase
 import com.spoonofcode.poa.core.model.LoginGoogleRequest
 import io.ktor.http.*
 import io.ktor.server.response.*

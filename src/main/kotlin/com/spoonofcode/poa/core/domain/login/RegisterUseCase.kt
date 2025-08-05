@@ -1,4 +1,4 @@
-package com.spoonofcode.poa.core.domain
+package com.spoonofcode.poa.core.domain.login
 
 import com.spoonofcode.poa.core.base.utils.PasswordUtil
 import com.spoonofcode.poa.core.data.repository.UserRepository

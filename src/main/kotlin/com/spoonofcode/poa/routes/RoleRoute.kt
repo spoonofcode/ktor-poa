@@ -4,7 +4,7 @@ import com.spoonofcode.poa.core.base.ext.safeRespond
 import com.spoonofcode.poa.core.base.ext.withValidQueryParameter
 import com.spoonofcode.poa.core.base.routes.crudRoute
 import com.spoonofcode.poa.core.data.repository.RoleRepository
-import com.spoonofcode.poa.core.domain.GetAllRolesByUserIdUseCase
+import com.spoonofcode.poa.core.domain.role.GetAllRolesByUserIdUseCase
 import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*

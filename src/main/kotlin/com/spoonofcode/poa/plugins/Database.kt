@@ -22,7 +22,8 @@ fun Application.configureDatabases() {
             Roles,
             UserRoles,
             Products,
-            UserProducts
+            UserProducts,
+            Partners,
         )
         setExampleData()
     }
@@ -47,8 +48,9 @@ private fun dropTables() {
             Roles,
             UserRoles,
             Products,
-            UserProducts
-        ) // Add all the tables you want to drop here
+            UserProducts,
+            Partners,
+        )
     }
 }
 
@@ -120,6 +122,30 @@ private fun setExampleData() {
     UserProducts.insert {
         it[userId] = 1
         it[productId] = 2
+    }
+
+    Partners.insert {
+        it[name] = "Beauty Saute"
+        it[email] = "beauty.saute@gmail.com"
+        it[description] = "Beauty Sautè to więcej niż odzież – to filozofia."
+        it[imageLink] = "https://beautysaute.pl/environment/cache/images/0_0_storefrontImages_11a16d30-d85a-422f-917d-195c30274147.png"
+        it[websiteLink] = "https://beautysaute.pl/"
+        it[instagramLink] = "https://www.instagram.com/beauty_saute_fashion/?igsh=Y3FxN2U3bDRya2F0&utm_source=qr#"
+        it[facebookLink] = "https://www.facebook.com/profile.php?id=61568636916637"
+        it[youtubeLink] = "https://www.instagram.com/beauty_saute_fashion/?igsh=Y3FxN2U3bDRya2F0&utm_source=qr#"
+        it[xLink] = "https://www.instagram.com/beauty_saute_fashion/?igsh=Y3FxN2U3bDRya2F0&utm_source=qr#"
+    }
+
+    Partners.insert {
+        it[name] = "Proof of Wear"
+        it[email] = "proof.of.wear@gmail.com"
+        it[description] = "Proof of Wear – sprawdz to."
+        it[imageLink] = "https://proof-of-wear.com/images/logo.jpg"
+        it[websiteLink] = "https://proof-of-wear.com/"
+        it[instagramLink] = "https://www.instagram.com/proof_of_wear/?igsh=MXMwODNiZW1qNTRlMA%3D%3D#"
+        it[facebookLink] = "https://www.instagram.com/proof_of_wear/?igsh=MXMwODNiZW1qNTRlMA%3D%3D#"
+        it[youtubeLink] = "https://www.instagram.com/proof_of_wear/?igsh=MXMwODNiZW1qNTRlMA%3D%3D#"
+        it[xLink] = "https://x.com/ProofOfWearPOW?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
     }
 }
 

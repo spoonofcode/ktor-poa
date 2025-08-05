@@ -1,4 +1,4 @@
-package com.spoonofcode.poa.core.domain
+package com.spoonofcode.poa.core.domain.user
 
 import com.spoonofcode.poa.core.data.repository.UserRepository
 import com.spoonofcode.poa.core.model.User

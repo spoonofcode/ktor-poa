@@ -5,6 +5,7 @@ import com.spoonofcode.poa.feature.login.login.loginGoogle
 import com.spoonofcode.poa.feature.login.refresh.refresh
 import com.spoonofcode.poa.feature.login.register.register
 import com.spoonofcode.poa.feature.messagefcm.messageFCM
+import com.spoonofcode.poa.feature.partner.partners
 import com.spoonofcode.poa.feature.product.products
 import com.spoonofcode.poa.feature.profile.profile
 import com.spoonofcode.poa.feature.user.users
@@ -24,6 +25,7 @@ fun Application.configureRouting() {
         authenticate("auth-jwt") {
             users()
             roles()
+            partners()
             products()
             profile()
             // Static plugin. Try to access `/static/index.html`

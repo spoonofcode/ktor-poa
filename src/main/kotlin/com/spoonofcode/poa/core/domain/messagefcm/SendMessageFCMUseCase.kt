@@ -1,4 +1,4 @@
-package com.spoonofcode.poa.core.domain
+package com.spoonofcode.poa.core.domain.messagefcm
 
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message

@@ -6,8 +6,8 @@ import com.spoonofcode.poa.core.base.ext.withValidParameter
 import com.spoonofcode.poa.core.base.ext.withValidQueryParameter
 import com.spoonofcode.poa.core.base.routes.crudRoute
 import com.spoonofcode.poa.core.data.repository.ProductRepository
-import com.spoonofcode.poa.core.domain.AddProductToUserUseCase
-import com.spoonofcode.poa.core.domain.GetProductsOwnedByUserUseCase
+import com.spoonofcode.poa.core.domain.product.AddProductToUserUseCase
+import com.spoonofcode.poa.core.domain.product.GetProductsOwnedByUserUseCase
 import com.spoonofcode.poa.core.model.AddProductToUserRequest
 import io.ktor.http.*
 import io.ktor.server.response.*
