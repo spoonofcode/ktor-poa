@@ -23,6 +23,7 @@ fun Application.configureDatabases() {
             UserRoles,
             Products,
             UserProducts,
+            PartnerCategories,
             Partners,
         )
         setExampleData()
@@ -49,6 +50,7 @@ private fun dropTables() {
             UserRoles,
             Products,
             UserProducts,
+            PartnerCategories,
             Partners,
         )
     }
@@ -122,6 +124,26 @@ private fun setExampleData() {
     UserProducts.insert {
         it[userId] = 1
         it[productId] = 2
+    }
+
+    PartnerCategories.insert {
+        it[name] = "Beuty"
+    }
+
+    PartnerCategories.insert {
+        it[name] = "Sport"
+    }
+
+    PartnerCategories.insert {
+        it[name] = "Clothes"
+    }
+
+    PartnerCategories.insert {
+        it[name] = "Music"
+    }
+
+    PartnerCategories.insert {
+        it[name] = "Technology"
     }
 
     Partners.insert {

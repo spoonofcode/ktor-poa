@@ -6,6 +6,7 @@ import org.koin.dsl.module
 
 val dataModule = module {
     singleOf(::UserRolesRepository)
+    singleOf(::PartnerCategoryRepository)
     singleOf(::PartnerRepository)
     singleOf(::ProductRepository)
     singleOf(::RoleRepository)
