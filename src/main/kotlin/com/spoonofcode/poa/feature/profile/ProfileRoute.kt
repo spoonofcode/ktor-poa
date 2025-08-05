@@ -2,7 +2,8 @@ package com.spoonofcode.poa.feature.profile
 
 import com.spoonofcode.poa.core.base.ext.safeRespond
 import com.spoonofcode.poa.core.base.ext.withValidParameter
-import com.spoonofcode.poa.core.domain.GetProfileUseCase
+import com.spoonofcode.poa.core.domain.profile.GetProfileUseCase
+import com.spoonofcode.poa.core.domain.profile.ProfileResult
 import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -21,7 +22,7 @@ fun Route.profile(getProfileUseCase: GetProfileUseCase = get()) {
                             call.respond(HttpStatusCode.OK, result.profile)
                         }
 
-                        ProfileResult.UserNotFound -> {
+                        ProfileResult.NotFound -> {
                             call.respond(HttpStatusCode.NotFound, "User with id = $userId not found.")
                         }
                     }

@@ -2,7 +2,7 @@ package com.spoonofcode.poa.feature.messagefcm
 
 import com.spoonofcode.poa.core.base.ext.safeRespond
 import com.spoonofcode.poa.core.base.ext.withValidBody
-import com.spoonofcode.poa.core.domain.SendMessageFCMUseCase
+import com.spoonofcode.poa.core.domain.messagefcm.SendMessageFCMUseCase
 import com.spoonofcode.poa.core.model.MessageFCM
 import io.ktor.http.*
 import io.ktor.server.response.*

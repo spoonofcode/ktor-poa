@@ -1,4 +1,4 @@
-package com.spoonofcode.poa.core.domain
+package com.spoonofcode.poa.core.domain.product
 
 import com.spoonofcode.poa.core.data.repository.UserProductsRepository
 

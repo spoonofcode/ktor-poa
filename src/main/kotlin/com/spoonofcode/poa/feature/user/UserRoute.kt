@@ -6,8 +6,8 @@ import com.spoonofcode.poa.core.base.ext.withValidParameter
 import com.spoonofcode.poa.core.base.ext.withValidQueryParameter
 import com.spoonofcode.poa.core.base.routes.crudRoute
 import com.spoonofcode.poa.core.data.repository.UserRepository
-import com.spoonofcode.poa.core.domain.AddRoleToUserUseCase
-import com.spoonofcode.poa.core.domain.GetAllUsersByRoleIdUseCase
+import com.spoonofcode.poa.core.domain.role.AddRoleToUserUseCase
+import com.spoonofcode.poa.core.domain.user.GetAllUsersByRoleIdUseCase
 import com.spoonofcode.poa.core.model.AddRoleToUserRequest
 import io.ktor.http.*
 import io.ktor.server.response.*

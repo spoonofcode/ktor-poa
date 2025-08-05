@@ -7,7 +7,9 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 data class Partner(
     val id: Int,
     val name: String,
+    val email: String,
     val description: String,
+    val imageLink: String,
     val websiteLink: String? = null,
     val instagramLink: String? = null,
     val facebookLink: String? = null,
@@ -18,7 +20,9 @@ data class Partner(
 @Serializable
 data class PartnerRequest(
     val name: String,
+    val email: String,
     val description: String,
+    val imageLink: String,
     val websiteLink: String? = null,
     val instagramLink: String? = null,
     val facebookLink: String? = null,
@@ -29,7 +33,9 @@ data class PartnerRequest(
 
 object Partners : IntIdTable() {
     val name = varchar("name", 128)
-    val description = varchar("description", 128)
+    val email = varchar("email", 128)
+    val description = varchar("description", 255)
+    val imageLink = varchar("imageLink", 255)
     val websiteLink = varchar("website_link", 255).nullable()
     val instagramLink = varchar("instagram_link", 255).nullable()
     val facebookLink = varchar("facebook_link", 255).nullable()
