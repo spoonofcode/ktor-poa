@@ -13,6 +13,8 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
         mapOf(
             Products.name to request.name,
             Products.description to request.description,
+            Products.tagId to request.tagId,
+            Products.seriesId to request.seriesId,
             Products.collectionName to request.collectionName,
             Products.websiteLink to request.websiteLink,
             Products.customLink to request.customLink,
@@ -25,6 +27,7 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
             name = row[Products.name],
             description = row[Products.description],
             tagId = row[Products.tagId],
+            seriesId = row[Products.seriesId],
             collectionName = row[Products.collectionName],
             websiteLink = row[Products.websiteLink],
             customLink = row[Products.customLink],
