@@ -29,6 +29,7 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
             tagId = row[Products.tagId],
             seriesId = row[Products.seriesId],
             collectionName = row[Products.collectionName],
+            imageLink = row[Products.imageLink],
             websiteLink = row[Products.websiteLink],
             customLink = row[Products.customLink],
             ownerUser = User(

@@ -272,17 +272,29 @@ private fun getExpirationDateTime(): LocalDateTime {
 
 fun createProducts() {
     repeat(200) { index ->
+
+        val productSeriesId = (1..getImageLinks().size).random()
+
         Products.insert {
             it[name] = "Product #${index + 1}"
             it[description] = "Przykładowy opis wydarzenia nr ${index + 1}"
             it[tagId] = (1..5000).random().toString()
-            it[seriesId] = (1..1).random().toString()
+            it[seriesId] = productSeriesId.toString()
             it[collectionName] = "Collection 1"
+            it[imageLink] = getImageLinks()[productSeriesId - 1]
             it[websiteLink] = "https://beautysaute.pl/"
             it[customLink] = "https://beautysaute.pl/"
             it[ownerUserId] = (1..4).random()
         }
     }
 }
+
+private fun getImageLinks(): List<String> = listOf(
+    "https://beautysaute.pl/environment/cache/images/750_750_productGfx_261/bluza-damska-z-kapturem-ocieplana-bordo.webp",
+    "https://beautysaute.pl/environment/cache/images/750_750_productGfx_267/komplet-mocca-post.webp",
+    "https://beautysaute.pl/environment/cache/images/750_750_productGfx_259/Bluza-z-kapturem-damska-czarna-ocieplana.webp",
+    "https://beautysaute.pl/environment/cache/images/750_750_productGfx_257/bluza-damska-z-kapturem-pudrowy-roz.webp",
+    "https://beautysaute.pl/environment/cache/images/750_750_productGfx_262/Bluza-damska-bez-kaptura-czekolada.webp",
+)
 
 suspend fun <T> dbQuery(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO) { block() }
