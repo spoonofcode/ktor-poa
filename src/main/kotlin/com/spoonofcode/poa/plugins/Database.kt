@@ -275,8 +275,8 @@ fun createProducts() {
         Products.insert {
             it[name] = "Product #${index + 1}"
             it[description] = "Przykładowy opis wydarzenia nr ${index + 1}"
-            it[tagId] = "123456789"
-            it[seriesId] = "123456789"
+            it[tagId] = (1..5000).random().toString()
+            it[seriesId] = (1..1).random().toString()
             it[collectionName] = "Collection 1"
             it[websiteLink] = "https://beautysaute.pl/"
             it[customLink] = "https://beautysaute.pl/"
