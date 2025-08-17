@@ -2,6 +2,7 @@ package com.spoonofcode.poa.feature.notification
 
 import com.spoonofcode.poa.core.base.ext.safeRespond
 import com.spoonofcode.poa.core.base.ext.withValidBody
+import com.spoonofcode.poa.core.base.routes.CrudOperation
 import com.spoonofcode.poa.core.base.routes.crudRoute
 import com.spoonofcode.poa.core.data.repository.NotificationRepository
 import com.spoonofcode.poa.core.domain.notification.SendNotificationUseCase
@@ -30,6 +31,7 @@ fun Route.notifications(
 
     crudRoute(
         basePath = basePath,
-        repository = notificationRepository
+        repository = notificationRepository,
+        CrudOperation.Read, CrudOperation.All
     )
 }
