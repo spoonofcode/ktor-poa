@@ -11,35 +11,33 @@ class SendNotificationUseCase(
 ) {
     suspend operator fun invoke(notificationRequest: NotificationRequest): com.spoonofcode.poa.core.model.Notification {
         val notification = notificationRepository.create(notificationRequest)
+        val data = mapOf(NOTIFICATION_ID_KEY to notification.id.toString())
         with(notificationRequest) {
             if (seriesIds.isNotEmpty()) {
                 seriesIds.forEach { seriesId ->
-                    FirebaseMessaging.getInstance().send(buildNotificationForSeries(seriesId))
+                    FirebaseMessaging.getInstance().send(buildNotificationForSeries(seriesId, data))
                 }
             }
         }
         return notification
     }
 
-    private fun NotificationRequest.buildNotificationForSeries(seriesId: String): Message? = Message.builder()
-        .setNotification(
-            buildNotification(
-                title = title,
-                text = text,
-                link = link,
-                imageUrl = imageUrl
+    private fun NotificationRequest.buildNotificationForSeries(seriesId: String, data: Map<String, String>): Message? =
+        Message.builder()
+            .setNotification(
+                buildNotification(
+                    title = title,
+                    text = text,
+                    imageUrl = imageUrl
+                )
             )
-        )
-        .setTopic(seriesId)
-//        .apply {
-//            data?.let { putAllData(it) }
-//        }
-        .build()
+            .setTopic(seriesId)
+            .putAllData(data)
+            .build()
 
     private fun buildNotification(
         title: String,
         text: String,
-        link: String?,
         imageUrl: String?
     ): Notification =
         Notification.builder()
@@ -49,4 +47,8 @@ class SendNotificationUseCase(
                 imageUrl?.let { setImage(it) }
             }
             .build()
+
+    private companion object {
+        private const val NOTIFICATION_ID_KEY = "notificationId"
+    }
 }
