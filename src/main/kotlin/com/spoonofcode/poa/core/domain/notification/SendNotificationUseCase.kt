@@ -9,8 +9,8 @@ import com.spoonofcode.poa.core.model.NotificationRequest
 class SendNotificationUseCase(
     private val notificationRepository: NotificationRepository,
 ) {
-    suspend operator fun invoke(notificationRequest: NotificationRequest) {
-        notificationRepository.create(notificationRequest)
+    suspend operator fun invoke(notificationRequest: NotificationRequest): com.spoonofcode.poa.core.model.Notification {
+        val notification = notificationRepository.create(notificationRequest)
         with(notificationRequest) {
             if (seriesIds.isNotEmpty()) {
                 seriesIds.forEach { seriesId ->
@@ -18,6 +18,7 @@ class SendNotificationUseCase(
                 }
             }
         }
+        return notification
     }
 
     private fun NotificationRequest.buildNotificationForSeries(seriesId: String): Message? = Message.builder()
