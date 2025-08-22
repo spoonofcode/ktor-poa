@@ -57,6 +57,12 @@ jobs:
       - name: Run unit tests
         run: ./gradlew --no-daemon test
 
+      - name: Debug GH context
+        run: |
+          echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
+          echo "GITHUB_REF=$GITHUB_REF"
+          echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
+
       # 6) WIF — bezkluczowe logowanie do GCP
       - id: auth
         uses: google-github-actions/auth@v2
