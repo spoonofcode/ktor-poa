@@ -9,6 +9,7 @@ import com.spoonofcode.poa.feature.partner.partnerCategories
 import com.spoonofcode.poa.feature.partner.partners
 import com.spoonofcode.poa.feature.product.products
 import com.spoonofcode.poa.feature.profile.profile
+import com.spoonofcode.poa.feature.user.userPartners
 import com.spoonofcode.poa.feature.user.users
 import com.spoonofcode.poa.routes.roles
 import io.ktor.server.application.*
@@ -30,6 +31,7 @@ fun Application.configureRouting() {
             partnerCategories()
             products()
             profile()
+            userPartners()
             // Static plugin. Try to access `/static/index.html`
             static("/static") {
                 resources("static")
