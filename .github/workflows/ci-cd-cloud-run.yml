@@ -6,62 +6,89 @@ on:
   workflow_dispatch:
 
 env:
+  # ── USTAWIENIA PROJEKTU ───────────────────────────────────────────────────────
   PROJECT_ID: proof-of-authenticity
-  PROJECT_NUMBER: 123456789012
+  PROJECT_NUMBER: 179822836066
   REGION: europe-central2
   REPOSITORY: ktor-poa
   SERVICE: ktor-api
-  # Stała ścieżka do WIF provider (użyj właściwego PROJECT_NUMBER jeśli zmienisz)
-  WIF_PROVIDER: projects/123456789012/locations/global/workloadIdentityPools/github/providers/github-provider
+  # Stała ścieżka do WIF provider (UWAGA: numer projektu musi się zgadzać)
+  WIF_PROVIDER: projects/179822836066/locations/global/workloadIdentityPools/github/providers/github-provider
 
 jobs:
   deploy:
+    name: Build & Deploy to Cloud Run
     runs-on: ubuntu-latest
+
+    # wymagane do OIDC (WIF). 'contents: read' dla checkout.
     permissions:
       contents: read
-      id-token: write  # wymagane do OIDC/WIF
+      id-token: write
+
+    # tylko jeden deploy per gałąź naraz
     concurrency:
       group: cloud-run-${{ github.ref }}
       cancel-in-progress: true
 
     steps:
+      # 1) Pobierz kod
       - uses: actions/checkout@v4
 
-      # (opcjonalnie) testy jednostkowe przed buildem
+      # 2) Uprawnienia do gradlew (często potrzebne)
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # 3) Cache Gradle (przyspiesza buildy)
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle-
+
+      # 4) Java (jeśli budujesz JDK/Gradle)
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
+
+      # 5) Testy jednostkowe (opcjonalnie)
       - name: Run unit tests
         run: ./gradlew --no-daemon test
 
-      # Bezkluczowe uwierzytelnienie do GCP (WIF)
+      # 6) WIF — bezkluczowe logowanie do GCP
       - id: auth
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ env.WIF_PROVIDER }}
           service_account: gh-deployer@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
 
+      # 7) Instalacja i konfiguracja gcloud
       - uses: google-github-actions/setup-gcloud@v2
 
       - name: Set gcloud project
         run: gcloud config set project "$PROJECT_ID"
 
-      # Wyliczamy zmienne zależne (nie można ich budować na top-level env)
+      # 8) Zmienne pochodne (nie wspierane jako top-level env)
       - name: Compute dynamic env
         run: |
           echo "IMAGE=${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${SERVICE}:${GITHUB_SHA}" >> $GITHUB_ENV
           echo "RUNTIME_SA=ktor-runtime@${PROJECT_ID}.iam.gserviceaccount.com" >> $GITHUB_ENV
 
+      # 9) Logowanie dockera do Artifact Registry
       - name: Configure Docker for Artifact Registry
-        run: gcloud auth configure-docker ${REGION}-docker.pkg.dev --quiet
+        run: gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
 
+      # 10) Build obrazu
       - name: Build container image
         run: docker build -t "$IMAGE" .
 
+      # 11) Push obrazu
       - name: Push image
         run: docker push "$IMAGE"
 
+      # 12) Deploy do Cloud Run
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy "$SERVICE" \
@@ -74,7 +101,9 @@ jobs:
             --min-instances 0 \
             --max-instances 4 \
             --concurrency 80 \
-            --memory 512Mi
+            --memory 512Mi \
+            --quiet
 
+      # 13) Wydrukuj URL usługi
       - name: Print service URL
         run: gcloud run services describe "$SERVICE" --region "$REGION" --format 'value(status.url)'
