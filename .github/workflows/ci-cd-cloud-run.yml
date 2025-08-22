@@ -1,4 +1,4 @@
-ame: ci-cd-cloud-run
+name: ci-cd-cloud-run
 
 on:
   push:
