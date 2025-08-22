@@ -19,6 +19,11 @@ import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
     routing {
+        // Static plugin. Try to access `/static/index.html`
+        static("/static") {
+            resources("static")
+        }
+
         loginGoogle()
         login()
         register()
@@ -32,10 +37,6 @@ fun Application.configureRouting() {
             products()
             profile()
             notifications()
-            // Static plugin. Try to access `/static/index.html`
-            static("/static") {
-                resources("static")
-            }
         }
     }
 }
