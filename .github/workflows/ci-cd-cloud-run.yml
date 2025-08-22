@@ -7,12 +7,12 @@ on:
 
 env:
   PROJECT_ID: proof-of-authenticity
-  PROJECT_NUMBER: 123456789012
+  PROJECT_NUMBER: 179822836066
   REGION: europe-central2
   REPOSITORY: ktor-poa
   SERVICE: ktor-api
   # Stała ścieżka do WIF provider (użyj właściwego PROJECT_NUMBER jeśli zmienisz)
-  WIF_PROVIDER: projects/123456789012/locations/global/workloadIdentityPools/github/providers/github-provider
+  WIF_PROVIDER: projects/179822836066/locations/global/workloadIdentityPools/github/providers/github-provider
 
 jobs:
   deploy:
