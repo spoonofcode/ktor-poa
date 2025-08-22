@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # (opcjonalnie) testy jednostkowe unit przed buildem
+      # (opcjonalnie) testy jednostkowe przed buildem
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
