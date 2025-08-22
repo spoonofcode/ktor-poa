@@ -1,0 +1,73 @@
+name: ci-cd-cloud-run
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: proof-of-authenticity
+  PROJECT_NUMBER: 123456789012
+  REGION: europe-central2
+  REPOSITORY: ktor-poa
+  SERVICE: ktor-api
+  # docelowy adres obrazu w Artifact Registry
+  IMAGE: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}
+  RUNTIME_SA: ktor-runtime@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
+  WIF_PROVIDER: projects/123456789012/locations/global/workloadIdentityPools/github/providers/github-provider
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # wymagane do OIDC/WIF
+    concurrency:
+      group: cloud-run-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # (opcjonalnie) testy jednostkowe przed buildem
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Run unit tests
+        run: ./gradlew --no-daemon test
+
+      # Bezkluczowe uwierzytelnienie do GCP (WIF)
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ env.WIF_PROVIDER }}
+          service_account: gh-deployer@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      - name: Build container image
+        run: docker build -t ${{ env.IMAGE }} .
+
+      - name: Push image
+        run: docker push ${{ env.IMAGE }}
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ env.SERVICE }} \
+            --image ${{ env.IMAGE }} \
+            --region ${{ env.REGION }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --port 8080 \
+            --service-account ${{ env.RUNTIME_SA }} \
+            --min-instances 0 \
+            --max-instances 4 \
+            --concurrency 80 \
+            --memory 512Mi
+
+      - name: Print service URL
+        run: gcloud run services describe ${{ env.SERVICE }} --region ${{ env.REGION }} --format 'value(status.url)'
