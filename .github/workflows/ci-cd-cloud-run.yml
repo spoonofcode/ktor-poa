@@ -11,9 +11,7 @@ env:
   REGION: europe-central2
   REPOSITORY: ktor-poa
   SERVICE: ktor-api
-  # docelowy adres obrazu w Artifact Registry
-  IMAGE: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}
-  RUNTIME_SA: ktor-runtime@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
+  # Stała ścieżka do WIF provider (użyj właściwego PROJECT_NUMBER jeśli zmienisz)
   WIF_PROVIDER: projects/123456789012/locations/global/workloadIdentityPools/github/providers/github-provider
 
 jobs:
@@ -46,28 +44,37 @@ jobs:
 
       - uses: google-github-actions/setup-gcloud@v2
 
+      - name: Set gcloud project
+        run: gcloud config set project "$PROJECT_ID"
+
+      # Wyliczamy zmienne zależne (nie można ich budować na top-level env)
+      - name: Compute dynamic env
+        run: |
+          echo "IMAGE=${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${SERVICE}:${GITHUB_SHA}" >> $GITHUB_ENV
+          echo "RUNTIME_SA=ktor-runtime@${PROJECT_ID}.iam.gserviceaccount.com" >> $GITHUB_ENV
+
       - name: Configure Docker for Artifact Registry
-        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+        run: gcloud auth configure-docker ${REGION}-docker.pkg.dev --quiet
 
       - name: Build container image
-        run: docker build -t ${{ env.IMAGE }} .
+        run: docker build -t "$IMAGE" .
 
       - name: Push image
-        run: docker push ${{ env.IMAGE }}
+        run: docker push "$IMAGE"
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy ${{ env.SERVICE }} \
-            --image ${{ env.IMAGE }} \
-            --region ${{ env.REGION }} \
+          gcloud run deploy "$SERVICE" \
+            --image "$IMAGE" \
+            --region "$REGION" \
             --platform managed \
             --allow-unauthenticated \
             --port 8080 \
-            --service-account ${{ env.RUNTIME_SA }} \
+            --service-account "$RUNTIME_SA" \
             --min-instances 0 \
             --max-instances 4 \
             --concurrency 80 \
             --memory 512Mi
 
       - name: Print service URL
-        run: gcloud run services describe ${{ env.SERVICE }} --region ${{ env.REGION }} --format 'value(status.url)'
+        run: gcloud run services describe "$SERVICE" --region "$REGION" --format 'value(status.url)'
