@@ -1,0 +1,47 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  ktor-api:
+    build:
+      context: ./
+    container_name: ktor-api
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      APP_PORT: ${APP_PORT}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      JDBC_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    ports:
+      - "8080:8080"   # lokalnie: http://localhost:8080
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    restart: unless-stopped
+    depends_on:
+      - ktor-api
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    command: tunnel --no-autoupdate run
+    # cloudflared łączy się z chmurą; ruch do Ktor idzie po sieci docker: http://ktor-api:8080
+    # Publiczny host ustawimy w panelu CF (krok 3).
+
+volumes:
+  dbdata:

@@ -1,17 +1,13 @@
-# --- Build stage ---
-FROM gradle:8.8-jdk17 AS build
-WORKDIR /src
-COPY . .
-RUN gradle --no-daemon clean shadowJar
-
-# --- Runtime stage (distroless, nonroot) ---
-FROM gcr.io/distroless/java17-debian12:nonroot
+# --- build stage ---
+FROM gradle:8.8.0-jdk21 AS builder
 WORKDIR /app
-# kopiujemy fat-jar z Shadow plugin, np. *-all.jar
-COPY --from=build /src/build/libs/*-all.jar /app/app.jar
-ENV PORT=8080
-# bezpieczniejsze limity pamięci wewnątrz kontenera
-ENV JAVA_TOOL_OPTIONS="-XX:+ExitOnOutOfMemoryError -XX:MaxRAMPercentage=75"
+COPY . .
+RUN gradle --no-daemon shadowJar
+
+# --- run stage ---
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+COPY --from=builder /app/build/libs/com.spoonofcode.poa.ktor-poa-all.jar /app/app.jar
+ENV APP_PORT=8080
 EXPOSE 8080
-USER nonroot:nonroot
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+CMD ["java", "-jar", "/app/app.jar"]

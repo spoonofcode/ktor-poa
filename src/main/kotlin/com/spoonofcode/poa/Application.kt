@@ -9,10 +9,13 @@ fun main(args: Array<String>): Unit = EngineMain.main(args)
 fun Application.module() {
     configureMonitoring()
     configureSerialization()
-    configureDI()
-    configureDatabases()
+//    configureDI()
+//    configureDatabases()
 //    configureOAuthGoogleWebClient()
-    configureAuthenticationJWT()
-    configureRouting()
-    configureFirebase()
+//    configureAuthenticationJWT()
+//    configureRouting()
+    routingDocker()
+//    configureFirebase()
+
+
 }
