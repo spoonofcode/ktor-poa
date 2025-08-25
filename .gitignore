@@ -46,3 +46,7 @@ certificates/
 *keystore.jks
 local.properties
 service_account_key.json
+
+
+### Docker ###
+.env
