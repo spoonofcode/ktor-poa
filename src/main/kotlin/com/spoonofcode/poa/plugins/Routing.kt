@@ -5,6 +5,7 @@ import com.spoonofcode.poa.feature.login.login.loginGoogle
 import com.spoonofcode.poa.feature.login.refresh.refresh
 import com.spoonofcode.poa.feature.login.register.register
 import com.spoonofcode.poa.feature.messagefcm.messageFCM
+import com.spoonofcode.poa.feature.notification.notifications
 import com.spoonofcode.poa.feature.partner.partnerCategories
 import com.spoonofcode.poa.feature.partner.partners
 import com.spoonofcode.poa.feature.product.products
@@ -19,6 +20,11 @@ import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
     routing {
+        // Static plugin. Try to access `/static/index.html`
+        static("/static") {
+            resources("static")
+        }
+
         loginGoogle()
         login()
         register()
@@ -31,11 +37,8 @@ fun Application.configureRouting() {
             partnerCategories()
             products()
             profile()
+            notifications()
             userPartners()
-            // Static plugin. Try to access `/static/index.html`
-            static("/static") {
-                resources("static")
-            }
         }
     }
 }
