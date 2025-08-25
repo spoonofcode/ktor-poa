@@ -8,6 +8,5 @@ RUN gradle --no-daemon shadowJar
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=builder /app/build/libs/com.spoonofcode.poa.ktor-poa-all.jar /app/app.jar
-ENV APP_PORT=8080
-EXPOSE 8080
-CMD ["java", "-jar", "/app/app.jar"]
+COPY src/main/resources/application-docker.conf /app/application-docker.conf
+CMD ["java","-jar","/app/app.jar","-config=/app/application-docker.conf"]
