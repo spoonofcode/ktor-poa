@@ -24,12 +24,11 @@ services:
         condition: service_healthy
     environment:
       APP_PORT: ${APP_PORT}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
       JDBC_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     ports:
-      - "8080:8080"   # lokalnie: http://localhost:8080
+      - "8080:8080"
 
   cloudflared:
     image: cloudflare/cloudflared:latest
@@ -40,8 +39,6 @@ services:
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     command: tunnel --no-autoupdate run
-    # cloudflared łączy się z chmurą; ruch do Ktor idzie po sieci docker: http://ktor-api:8080
-    # Publiczny host ustawimy w panelu CF (krok 3).
 
 volumes:
   dbdata:

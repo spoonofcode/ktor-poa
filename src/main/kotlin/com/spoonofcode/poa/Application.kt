@@ -10,7 +10,7 @@ fun Application.module() {
     configureMonitoring()
     configureSerialization()
     configureDI()
-//    configureDatabases()
+    configureDatabases()
 //    configureOAuthGoogleWebClient()
     configureAuthenticationJWT()
     configureRouting()

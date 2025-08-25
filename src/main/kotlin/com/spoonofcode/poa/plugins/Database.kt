@@ -18,10 +18,25 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 
 fun Application.configureDatabases() {
-    val driverClass = environment.config.property("storage.driverClassName").getString()
-    val jdbcUrl = environment.config.property("storage.jdbcURL").getString()
-    val db = Database.connect(provideDataSource(jdbcUrl, driverClass))
-    transaction(db) {
+    val cfg = environment.config
+    val jdbcUrl = cfg.propertyOrNull("storage.jdbcUrl")?.getString()
+    val driverClassName = cfg.propertyOrNull("storage.driverClassName")?.getString()
+    val user = cfg.propertyOrNull("storage.user")?.getString()
+    val password = cfg.propertyOrNull("storage.password")?.getString()
+    val maxPoolSize = cfg.propertyOrNull("storage.maximumPoolSize")?.getString()?.toIntOrNull() ?: 5
+
+    require(!jdbcUrl.isNullOrBlank()) { "JDBC_URL missing" }
+
+    val database = Database.connect(
+        provideDataSource(
+            url = jdbcUrl,
+            driverClass = driverClassName,
+            user = user,
+            pass = password,
+            maximumPool = maxPoolSize,
+        )
+    )
+    transaction(database) {
         dropTables()
         SchemaUtils.create(
             Users,
@@ -37,11 +52,19 @@ fun Application.configureDatabases() {
     }
 }
 
-private fun provideDataSource(url: String, driverClass: String): HikariDataSource {
+private fun provideDataSource(
+    url: String,
+    driverClass: String?,
+    user: String?,
+    pass: String?,
+    maximumPool: Int,
+): HikariDataSource {
     val hikariConfig = HikariConfig().apply {
-        driverClassName = driverClass
         jdbcUrl = url
-        maximumPoolSize = 3
+        driverClassName = driverClass
+        username = user
+        password = pass
+        maximumPoolSize = maximumPool
         isAutoCommit = false
         transactionIsolation = "TRANSACTION_REPEATABLE_READ"
         validate()
