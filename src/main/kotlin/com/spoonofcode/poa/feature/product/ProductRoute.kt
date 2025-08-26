@@ -7,6 +7,7 @@ import com.spoonofcode.poa.core.base.ext.withValidQueryParameter
 import com.spoonofcode.poa.core.base.routes.crudRoute
 import com.spoonofcode.poa.core.data.repository.ProductRepository
 import com.spoonofcode.poa.core.domain.product.AddProductToUserUseCase
+import com.spoonofcode.poa.core.domain.product.GetProductByTagIdUseCase
 import com.spoonofcode.poa.core.domain.product.GetProductsOwnedByUserUseCase
 import com.spoonofcode.poa.core.model.AddProductToUserRequest
 import io.ktor.http.*
@@ -15,6 +16,7 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.get
 
 fun Route.products(
+    getProductByTagIdUseCase: GetProductByTagIdUseCase = get(),
     getProductsOwnedByUserUseCase: GetProductsOwnedByUserUseCase = get(),
     addProductToUserUseCase: AddProductToUserUseCase = get(),
     productRepository: ProductRepository = get(),
@@ -25,6 +27,18 @@ fun Route.products(
         repository = productRepository,
     )
     route(basePath) {
+        get("") {
+            call.withValidQueryParameter<String>(
+                paramName = "tagId",
+            ) { tagId ->
+                call.safeRespond {
+                    val productByTagId = getProductByTagIdUseCase(tagId = tagId)
+                    call.respond(HttpStatusCode.OK, productByTagId)
+                }
+            }
+        }
+
+
         get("") {
             call.withValidQueryParameter<Int>(
                 paramName = "ownerUserId",

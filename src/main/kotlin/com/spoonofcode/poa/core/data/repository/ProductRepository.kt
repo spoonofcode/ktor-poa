@@ -42,6 +42,17 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
         )
     }
 ) {
+
+    suspend fun readByTagId(tagId: String): Product {
+        return dbQuery {
+            Products
+                .leftJoin(Users)
+                .selectAll().where { Products.tagId eq tagId }.map {
+                    toResponse(it)
+                }.first()
+        }
+    }
+
     suspend fun readByOwnerUserId(ownerUserId: Int): List<Product> {
         return dbQuery {
             Products

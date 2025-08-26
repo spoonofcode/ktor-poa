@@ -301,7 +301,7 @@ fun createProducts() {
         Products.insert {
             it[name] = "Product #${index + 1}"
             it[description] = "Przykładowy opis wydarzenia nr ${index + 1}"
-            it[tagId] = (1..5000).random().toString()
+            it[tagId] = getAvaiablePOATagIds().random()
             it[seriesId] = productSeriesId.toString()
             it[collectionName] = "Collection 1"
             it[imageLink] = getImageLinks()[productSeriesId - 1]
@@ -311,6 +311,12 @@ fun createProducts() {
         }
     }
 }
+
+private fun getAvaiablePOATagIds(): List<String> = listOf(
+    "043469C2891D91",
+    "047AECC2891D90",
+    "04A971E2E51090",
+)
 
 private fun getImageLinks(): List<String> = listOf(
     "https://beautysaute.pl/environment/cache/images/750_750_productGfx_261/bluza-damska-z-kapturem-ocieplana-bordo.webp",

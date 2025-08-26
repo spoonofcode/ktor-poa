@@ -6,6 +6,7 @@ import com.spoonofcode.poa.core.domain.login.RegisterUseCase
 import com.spoonofcode.poa.core.domain.messagefcm.SendMessageFCMUseCase
 import com.spoonofcode.poa.core.domain.notification.SendNotificationUseCase
 import com.spoonofcode.poa.core.domain.product.AddProductToUserUseCase
+import com.spoonofcode.poa.core.domain.product.GetProductByTagIdUseCase
 import com.spoonofcode.poa.core.domain.product.GetProductsOwnedByUserUseCase
 import com.spoonofcode.poa.core.domain.profile.GetProfileUseCase
 import com.spoonofcode.poa.core.domain.role.AddRoleToUserUseCase
@@ -21,6 +22,7 @@ val domainModule = module {
     factoryOf(::RegisterUseCase)
     factoryOf(::GetAllRolesByUserIdUseCase)
     factoryOf(::GetAllUsersByRoleIdUseCase)
+    factoryOf(::GetProductByTagIdUseCase)
     factoryOf(::GetProductsOwnedByUserUseCase)
     factoryOf(::AddRoleToUserUseCase)
     factoryOf(::AddProductToUserUseCase)
