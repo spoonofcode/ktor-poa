@@ -146,6 +146,7 @@ private fun setExampleData() {
     }
 
     createProducts()
+    createProductWithTagWithoutUser()
 
     UserProducts.insert {
         it[userId] = 1
@@ -297,25 +298,44 @@ fun createProducts() {
     repeat(200) { index ->
 
         val productSeriesId = (1..getImageLinks().size).random()
+        val productUserId = getOwnerUserIdOrNull()
+        val productTagId = getAvaiablePOATagIds().random()
 
         Products.insert {
             it[name] = "Product #${index + 1}"
             it[description] = "Przykładowy opis wydarzenia nr ${index + 1}"
-            it[tagId] = getAvaiablePOATagIds().random()
+            it[tagId] = productTagId
             it[seriesId] = productSeriesId.toString()
             it[collectionName] = "Collection 1"
             it[imageLink] = getImageLinks()[productSeriesId - 1]
             it[websiteLink] = "https://beautysaute.pl/"
             it[customLink] = "https://beautysaute.pl/"
-            it[ownerUserId] = (1..4).random()
+            it[ownerUserId] = productUserId
         }
     }
 }
 
+fun createProductWithTagWithoutUser()  {
+    val productSeriesId = (1..getImageLinks().size).random()
+
+    Products.insert {
+        it[name] = "Product 999"
+        it[description] = "Przykładowy opis wydarzenia nr 999"
+        it[tagId] = "04A971E2E51090" //TAG from the "Money makes money" hat
+        it[seriesId] = productSeriesId.toString()
+        it[collectionName] = "Collection 1"
+        it[imageLink] = getImageLinks()[productSeriesId - 1]
+        it[websiteLink] = "https://proof-of-wear.com/"
+        it[customLink] = "https://proof-of-wear.com/"
+    }
+}
+
+// random: 70% chance of userId, 30% chance of null
+private fun getOwnerUserIdOrNull() = if ((1..10).random() <= 7) (1..4).random() else null
+
 private fun getAvaiablePOATagIds(): List<String> = listOf(
     "043469C2891D91",
     "047AECC2891D90",
-    "04A971E2E51090",
 )
 
 private fun getImageLinks(): List<String> = listOf(

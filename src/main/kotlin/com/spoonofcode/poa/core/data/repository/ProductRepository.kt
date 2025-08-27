@@ -13,12 +13,16 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
         mapOf(
             Products.name to request.name,
             Products.description to request.description,
-            Products.tagId to request.tagId,
             Products.seriesId to request.seriesId,
             Products.collectionName to request.collectionName,
+            Products.tagId to request.tagId,
             Products.websiteLink to request.websiteLink,
             Products.customLink to request.customLink,
-            Products.ownerUserId to EntityID(request.ownerUserId, Users),
+            Products.ownerUserId to if (request.ownerUserId != null) {
+                EntityID(request.ownerUserId, Users)
+            } else {
+                null
+            },
         )
     },
     toResponse = { row ->
@@ -26,19 +30,23 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
             id = row[Products.id].value,
             name = row[Products.name],
             description = row[Products.description],
-            tagId = row[Products.tagId],
             seriesId = row[Products.seriesId],
             collectionName = row[Products.collectionName],
             imageLink = row[Products.imageLink],
+            tagId = row[Products.tagId],
             websiteLink = row[Products.websiteLink],
             customLink = row[Products.customLink],
-            ownerUser = User(
-                id = row[Users.id].value,
-                firstName = row[Users.firstName],
-                lastName = row[Users.lastName],
-                nickName = row[Users.nickName],
-                email = row[Users.email],
-            ),
+            ownerUser = if (row[Products.ownerUserId] != null) {
+                User(
+                    id = row[Users.id].value,
+                    firstName = row[Users.firstName],
+                    lastName = row[Users.lastName],
+                    nickName = row[Users.nickName],
+                    email = row[Users.email],
+                )
+            } else {
+                null
+            },
         )
     }
 ) {
@@ -65,7 +73,9 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
 
     suspend fun countByOwnerUserId(userId: Int): Long {
         return dbQuery {
-            Products.selectAll().where { Products.ownerUserId eq userId }.count()
+            Products
+                .leftJoin(Users)
+                .selectAll().where { Products.ownerUserId eq userId }.count()
         }
     }
 }

@@ -27,25 +27,28 @@ fun Route.products(
         repository = productRepository,
     )
     route(basePath) {
-        get("") {
-            call.withValidQueryParameter<String>(
-                paramName = "tagId",
-            ) { tagId ->
-                call.safeRespond {
-                    val productByTagId = getProductByTagIdUseCase(tagId = tagId)
-                    call.respond(HttpStatusCode.OK, productByTagId)
+        param("tagId") {
+            get("") {
+                call.withValidQueryParameter<String>(
+                    paramName = "tagId",
+                ) { tagId ->
+                    call.safeRespond {
+                        val productByTagId = getProductByTagIdUseCase(tagId = tagId)
+                        call.respond(HttpStatusCode.OK, productByTagId)
+                    }
                 }
             }
         }
 
-
-        get("") {
-            call.withValidQueryParameter<Int>(
-                paramName = "ownerUserId",
-            ) { ownerUserId ->
-                call.safeRespond {
-                    val productsByownerUserId = getProductsOwnedByUserUseCase(ownerUserId = ownerUserId)
-                    call.respond(HttpStatusCode.OK, productsByownerUserId)
+        param("ownerUserId") {
+            get("") {
+                call.withValidQueryParameter<Int>(
+                    paramName = "ownerUserId",
+                ) { ownerUserId ->
+                    call.safeRespond {
+                        val productsByownerUserId = getProductsOwnedByUserUseCase(ownerUserId = ownerUserId)
+                        call.respond(HttpStatusCode.OK, productsByownerUserId)
+                    }
                 }
             }
         }
