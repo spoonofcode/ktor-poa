@@ -5,6 +5,7 @@ import com.spoonofcode.poa.core.model.*
 import com.spoonofcode.poa.plugins.dbQuery
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.update
 
 class ProductRepository : GenericCrudRepository<Products, ProductRequest, Product>(
     table = Products,
@@ -76,6 +77,14 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
             Products
                 .leftJoin(Users)
                 .selectAll().where { Products.ownerUserId eq userId }.count()
+        }
+    }
+
+    suspend fun addOwnerUserId(productId: Int, userId: Int) {
+        return dbQuery {
+            Products.update({ Products.id eq productId }) {
+                it[ownerUserId] = userId
+            }
         }
     }
 }

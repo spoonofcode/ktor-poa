@@ -1,10 +1,10 @@
 package com.spoonofcode.poa.feature.login.register
 
-import com.spoonofcode.poa.core.base.ext.safeRespond
-import com.spoonofcode.poa.core.base.ext.withValidBody
 import com.spoonofcode.poa.core.domain.login.RegisterUseCase
 import com.spoonofcode.poa.core.model.RegisterRequest
 import com.spoonofcode.poa.core.model.UserRequest
+import com.spoonofcode.poa.core.network.ext.safeRespond
+import com.spoonofcode.poa.core.network.ext.withValidBody
 import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*

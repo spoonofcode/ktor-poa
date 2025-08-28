@@ -1,10 +1,10 @@
 package com.spoonofcode.poa.routes
 
-import com.spoonofcode.poa.core.base.ext.safeRespond
-import com.spoonofcode.poa.core.base.ext.withValidQueryParameter
 import com.spoonofcode.poa.core.base.routes.crudRoute
 import com.spoonofcode.poa.core.data.repository.RoleRepository
 import com.spoonofcode.poa.core.domain.role.GetAllRolesByUserIdUseCase
+import com.spoonofcode.poa.core.network.ext.safeRespond
+import com.spoonofcode.poa.core.network.ext.withValidQueryParameter
 import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
