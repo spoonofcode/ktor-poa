@@ -1,45 +1,44 @@
 package com.spoonofcode.poa.feature.user
 
+// Importy
+import com.spoonofcode.poa.core.base.ext.safeRespond
+import com.spoonofcode.poa.core.base.ext.withValidParameter
+import com.spoonofcode.poa.core.domain.user.GetAllPartnersForUserUseCase // Upewnij się, że ten import jest poprawny
+import com.spoonofcode.poa.core.base.routes.CrudOperation
+import com.spoonofcode.poa.core.base.routes.crudRoute
 import com.spoonofcode.poa.core.data.repository.UserPartnersRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.koin.ktor.ext.inject
+import org.koin.ktor.ext.get
 
-fun Route.userPartners() {
-    val userPartnersRepository by inject<UserPartnersRepository>()
+fun Route.userPartners(
+    userPartnersRepository: UserPartnersRepository = get(),
+    getAllPartnersForUserUseCase: GetAllPartnersForUserUseCase = get()
+) {
+    val basePath = "/userPartners"
 
-    route("/users/{userId}/partners") {
-        get {
-            val userId = call.parameters["userId"]?.toIntOrNull()
-                ?: return@get call.respond(HttpStatusCode.BadRequest, "Invalid or missing userId")
+    crudRoute(
+        basePath = basePath,
+        repository = userPartnersRepository,
+        CrudOperation.Read,
+        CrudOperation.All,
+        CrudOperation.Create,
+        CrudOperation.Update,
+        CrudOperation.Delete
+    )
 
-            val partners = userPartnersRepository.findAllForUser(userId)
-            call.respond(partners)
-        }
-
-        post("/{partnerId}") {
-            val userId = call.parameters["userId"]?.toIntOrNull()
-                ?: return@post call.respond(HttpStatusCode.BadRequest, "Invalid or missing userId")
-            val partnerId = call.parameters["partnerId"]?.toIntOrNull()
-                ?: return@post call.respond(HttpStatusCode.BadRequest, "Invalid or missing partnerId")
-
-            userPartnersRepository.add(userId, partnerId)
-            call.respond(HttpStatusCode.Created)
-        }
-
-        delete("/{partnerId}") {
-            val userId = call.parameters["userId"]?.toIntOrNull()
-                ?: return@delete call.respond(HttpStatusCode.BadRequest, "Invalid or missing userId")
-            val partnerId = call.parameters["partnerId"]?.toIntOrNull()
-                ?: return@delete call.respond(HttpStatusCode.BadRequest, "Invalid or missing partnerId")
-
-            val removedCount = userPartnersRepository.remove(userId, partnerId)
-            if (removedCount > 0) {
-                call.respond(HttpStatusCode.NoContent)
-            } else {
-                call.respond(HttpStatusCode.NotFound)
+    route(basePath) {
+        get("/{userId}/partners") {
+            call.withValidParameter(
+                paramName = "userId",
+                parser = String::toIntOrNull
+            ) { userId ->
+                call.safeRespond {
+                    val partners = getAllPartnersForUserUseCase(userId)
+                    call.respond(HttpStatusCode.OK, partners)
+                }
             }
         }
     }
