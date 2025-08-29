@@ -23,6 +23,9 @@
 hs_err_pid*
 replay_pid*
 
+### Mac OS ###
+.DS_Store
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -35,6 +38,7 @@ out/
 ### VS Code ###
 .vscode/
 
+### Gradle ###
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -46,3 +50,6 @@ certificates/
 *keystore.jks
 local.properties
 service_account_key.json
+
+### Docker ###
+.env
