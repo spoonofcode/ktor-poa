@@ -12,7 +12,7 @@ data class NotificationRequest(
     val link: String? = null,
     val imageUrl: String? = null,
     val seriesIds: List<String>,
-    val expirationDate: LocalDateTime? = null,
+    val expirationDateTime: LocalDateTime? = null,
 )
 
 @Serializable
@@ -21,12 +21,12 @@ data class Notification(
     val title: String,
     val text: String,
     val link: String? = null,
-    val expirationDate: LocalDateTime? = null,
+    val expirationDateTime: LocalDateTime? = null,
 )
 
 object Notifications : IntIdTable() {
     val title = varchar("title", 128)
     val text = varchar("text", 255)
     val link = varchar("link", 255).nullable()
-    val expirationDate = datetime("expiration_date").nullable()
+    val expirationDate = datetime("expiration_date_time").nullable()
 }

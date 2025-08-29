@@ -12,7 +12,7 @@ class NotificationRepository : GenericCrudRepository<Notifications, Notification
             Notifications.title to request.title,
             Notifications.text to request.text,
             Notifications.link to request.link,
-            Notifications.expirationDate to request.expirationDate,
+            Notifications.expirationDate to request.expirationDateTime,
         )
     },
     toResponse = { row ->
@@ -21,7 +21,7 @@ class NotificationRepository : GenericCrudRepository<Notifications, Notification
             title = row[Notifications.title],
             text = row[Notifications.text],
             link = row[Notifications.link],
-            expirationDate = row[Notifications.expirationDate],
+            expirationDateTime = row[Notifications.expirationDate],
         )
     }
 )
