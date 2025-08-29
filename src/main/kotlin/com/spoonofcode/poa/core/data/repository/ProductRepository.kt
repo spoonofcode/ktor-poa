@@ -5,6 +5,7 @@ import com.spoonofcode.poa.core.model.*
 import com.spoonofcode.poa.plugins.dbQuery
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.update
 
 class ProductRepository : GenericCrudRepository<Products, ProductRequest, Product>(
     table = Products,
@@ -13,12 +14,16 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
         mapOf(
             Products.name to request.name,
             Products.description to request.description,
-            Products.tagId to request.tagId,
             Products.seriesId to request.seriesId,
             Products.collectionName to request.collectionName,
+            Products.tagId to request.tagId,
             Products.websiteLink to request.websiteLink,
             Products.customLink to request.customLink,
-            Products.ownerUserId to EntityID(request.ownerUserId, Users),
+            Products.ownerUserId to if (request.ownerUserId != null) {
+                EntityID(request.ownerUserId, Users)
+            } else {
+                null
+            },
         )
     },
     toResponse = { row ->
@@ -26,22 +31,37 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
             id = row[Products.id].value,
             name = row[Products.name],
             description = row[Products.description],
-            tagId = row[Products.tagId],
             seriesId = row[Products.seriesId],
             collectionName = row[Products.collectionName],
             imageLink = row[Products.imageLink],
+            tagId = row[Products.tagId],
             websiteLink = row[Products.websiteLink],
             customLink = row[Products.customLink],
-            ownerUser = User(
-                id = row[Users.id].value,
-                firstName = row[Users.firstName],
-                lastName = row[Users.lastName],
-                nickName = row[Users.nickName],
-                email = row[Users.email],
-            ),
+            ownerUser = if (row[Products.ownerUserId] != null) {
+                User(
+                    id = row[Users.id].value,
+                    firstName = row[Users.firstName],
+                    lastName = row[Users.lastName],
+                    nickName = row[Users.nickName],
+                    email = row[Users.email],
+                )
+            } else {
+                null
+            },
         )
     }
 ) {
+
+    suspend fun readByTagId(tagId: String): Product {
+        return dbQuery {
+            Products
+                .leftJoin(Users)
+                .selectAll().where { Products.tagId eq tagId }.map {
+                    toResponse(it)
+                }.first()
+        }
+    }
+
     suspend fun readByOwnerUserId(ownerUserId: Int): List<Product> {
         return dbQuery {
             Products
@@ -54,7 +74,17 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
 
     suspend fun countByOwnerUserId(userId: Int): Long {
         return dbQuery {
-            Products.selectAll().where { Products.ownerUserId eq userId }.count()
+            Products
+                .leftJoin(Users)
+                .selectAll().where { Products.ownerUserId eq userId }.count()
+        }
+    }
+
+    suspend fun addOwnerUserId(productId: Int, userId: Int) {
+        return dbQuery {
+            Products.update({ Products.id eq productId }) {
+                it[ownerUserId] = userId
+            }
         }
     }
 }

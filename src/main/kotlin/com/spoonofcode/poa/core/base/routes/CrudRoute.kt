@@ -1,8 +1,8 @@
 package com.spoonofcode.poa.core.base.routes
 
-import com.spoonofcode.poa.core.base.ext.safeRespond
-import com.spoonofcode.poa.core.base.ext.withValidParameter
 import com.spoonofcode.poa.core.base.repository.CrudRepository
+import com.spoonofcode.poa.core.network.ext.safeRespond
+import com.spoonofcode.poa.core.network.ext.withValidParameter
 import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*

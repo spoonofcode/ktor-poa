@@ -1,14 +1,18 @@
 package com.spoonofcode.poa.feature.user
 
-import com.spoonofcode.poa.core.base.ext.safeRespond
-import com.spoonofcode.poa.core.base.ext.withValidBody
-import com.spoonofcode.poa.core.base.ext.withValidParameter
-import com.spoonofcode.poa.core.base.ext.withValidQueryParameter
 import com.spoonofcode.poa.core.base.routes.crudRoute
 import com.spoonofcode.poa.core.data.repository.UserRepository
+import com.spoonofcode.poa.core.domain.product.GetUserProductsUseCase
 import com.spoonofcode.poa.core.domain.role.AddRoleToUserUseCase
+import com.spoonofcode.poa.core.domain.user.AddProductToUserUseCase
 import com.spoonofcode.poa.core.domain.user.GetAllUsersByRoleIdUseCase
+import com.spoonofcode.poa.core.model.AddProductToUserRequest
 import com.spoonofcode.poa.core.model.AddRoleToUserRequest
+import com.spoonofcode.poa.core.network.ext.safeRespond
+import com.spoonofcode.poa.core.network.ext.withValidBody
+import com.spoonofcode.poa.core.network.ext.withValidParameter
+import com.spoonofcode.poa.core.network.ext.withValidQueryParameter
+import com.spoonofcode.poa.feature.product.ProductResult
 import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -17,7 +21,9 @@ import org.koin.ktor.ext.get
 fun Route.users(
     userRepository: UserRepository = get(),
     getAllUsersByRoleIdUseCase: GetAllUsersByRoleIdUseCase = get(),
+    getUserProductsUseCase: GetUserProductsUseCase = get(),
     addRoleToUserUseCase: AddRoleToUserUseCase = get(),
+    addProductToUserUseCase: AddProductToUserUseCase = get(),
 ) {
     val basePath = "/users"
     crudRoute(
@@ -32,6 +38,54 @@ fun Route.users(
                 call.safeRespond {
                     val usersByRoleId = getAllUsersByRoleIdUseCase(roleId = roleId)
                     call.respond(HttpStatusCode.OK, usersByRoleId)
+                }
+            }
+        }
+
+        get("/{userId}/products") {
+            call.withValidParameter(
+                paramName = "userId",
+                parser = String::toIntOrNull,
+            ) { userId ->
+                call.safeRespond {
+                    val userProducts = getUserProductsUseCase(ownerUserId = userId)
+                    call.respond(HttpStatusCode.OK, userProducts)
+                }
+            }
+        }
+
+        post("/{userId}/products") {
+            call.withValidParameter(
+                paramName = "userId",
+                parser = String::toIntOrNull
+            ) { userId ->
+                call.withValidBody<AddProductToUserRequest> { body ->
+                    val productId = body.productId
+                    call.safeRespond {
+                        when (addProductToUserUseCase(productId = productId, userId = userId)) {
+                            is ProductResult.Success -> {
+                                call.respond(
+                                    HttpStatusCode.Created,
+                                    "Product with id = $productId added to user with id = $userId."
+                                )
+                            }
+
+                            is ProductResult.Error -> call.respond(
+                                HttpStatusCode.InternalServerError,
+                                "Product with id = $productId couldn't be added to user with id = $userId."
+                            )
+
+                            is ProductResult.ProductNotFound -> call.respond(
+                                HttpStatusCode.NotFound,
+                                "Product with id = $productId not found"
+                            )
+
+                            is ProductResult.UserNotFound -> call.respond(
+                                HttpStatusCode.NotFound,
+                                "User with id = $userId not found"
+                            )
+                        }
+                    }
                 }
             }
         }

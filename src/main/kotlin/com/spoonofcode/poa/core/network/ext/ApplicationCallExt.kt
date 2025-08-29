@@ -1,5 +1,7 @@
-package com.spoonofcode.poa.core.base.ext
+package com.spoonofcode.poa.core.network.ext
 
+import com.spoonofcode.poa.core.network.ParamSpec
+import com.spoonofcode.poa.core.network.ParamValues
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -25,6 +27,30 @@ suspend fun <T> ApplicationCall.withValidParameter(
         ?: return respond(HttpStatusCode.BadRequest, "Missing or invalid '$paramName' parameter.")
 
     block(parsedValue)
+}
+
+suspend fun ApplicationCall.validParameters(
+    vararg specs: ParamSpec<*>
+): ParamValues? {
+    val out = LinkedHashMap<String, Any>(specs.size)
+    for (specAny in specs) {
+        @Suppress("UNCHECKED_CAST")
+        val spec = specAny as ParamSpec<Any>
+        val raw = parameters[spec.name]
+            ?: return respond(HttpStatusCode.BadRequest, "Missing '${spec.name}' parameter.").let { null }
+        val parsed = spec.parser(raw)
+            ?: return respond(HttpStatusCode.BadRequest, "Invalid '${spec.name}' parameter: '$raw'.").let { null }
+        out[spec.name] = parsed
+    }
+    return ParamValues(out)
+}
+
+suspend fun ApplicationCall.withValidParameters(
+    vararg specs: ParamSpec<*>,
+    block: suspend (ParamValues) -> Unit
+) {
+    val values = validParameters(*specs) ?: return
+    block(values)
 }
 
 suspend inline fun <reified T> ApplicationCall.withValidQueryParameter(
