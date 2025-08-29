@@ -53,3 +53,5 @@ service_account_key.json
 
 ### Docker ###
 .env
+
+.DS_Store
