@@ -7,14 +7,12 @@ import io.ktor.server.netty.*
 fun main(args: Array<String>): Unit = EngineMain.main(args)
 
 fun Application.module() {
-    configureMonitoring()
-    configureSerialization()
-    configureDI()
-    configureDatabases()
-//    configureOAuthGoogleWebClient()
-    configureAuthenticationJWT()
-    configureRouting()
-//    configureFirebase()
-
-
+   configureMonitoring()
+   configureSerialization()
+   configureDI()
+   configureDatabases()
+   //configureOAuthGoogleWebClient()
+   configureAuthenticationJWT()
+   configureRouting()
+   configureFirebase()
 }

@@ -47,6 +47,7 @@ fun Application.configureDatabases() {
             PartnerCategories,
             Partners,
             Notifications,
+            UserPartners
         )
         setExampleData()
     }
@@ -83,6 +84,7 @@ private fun dropTables() {
             PartnerCategories,
             Partners,
             Notifications,
+            UserPartners
         )
     }
 }
@@ -211,6 +213,15 @@ private fun createPartners() {
         it[facebookLink] = "https://www.instagram.com/proof_of_wear/?igsh=MXMwODNiZW1qNTRlMA%3D%3D#"
         it[youtubeLink] = "https://www.instagram.com/proof_of_wear/?igsh=MXMwODNiZW1qNTRlMA%3D%3D#"
         it[xLink] = "https://x.com/ProofOfWearPOW?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
+    }
+    UserPartners.insert {
+        it[user] = 2
+        it[partner] = 1
+    }
+
+    UserPartners.insert {
+        it[user] = 2
+        it[partner] = 2
     }
 }
 

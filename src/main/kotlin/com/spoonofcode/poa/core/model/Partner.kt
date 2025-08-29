@@ -2,6 +2,7 @@ package com.spoonofcode.poa.core.model
 
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.ResultRow
 
 @Serializable
 data class Partner(
@@ -41,4 +42,17 @@ object Partners : IntIdTable() {
     val facebookLink = varchar("facebook_link", 255).nullable()
     val youtubeLink = varchar("youtube_link", 255).nullable()
     val xLink = varchar("x_link", 255).nullable()
+
+    fun toModel(row: ResultRow) = Partner(
+        id = row[id].value,
+        name = row[name],
+        email = row[email],
+        description = row[description],
+        imageLink = row[imageLink],
+        websiteLink = row[websiteLink],
+        instagramLink = row[instagramLink],
+        facebookLink = row[facebookLink],
+        youtubeLink = row[youtubeLink],
+        xLink = row[xLink]
+    )
 }
