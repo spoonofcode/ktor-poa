@@ -10,6 +10,7 @@ import com.spoonofcode.poa.core.domain.product.GetProductsOwnedByUserUseCase
 import com.spoonofcode.poa.core.domain.profile.GetProfileUseCase
 import com.spoonofcode.poa.core.domain.role.AddRoleToUserUseCase
 import com.spoonofcode.poa.core.domain.role.GetAllRolesByUserIdUseCase
+import com.spoonofcode.poa.core.domain.user.GetAllPartnersForUserUseCase
 import com.spoonofcode.poa.core.domain.user.GetAllUsersByRoleIdUseCase
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
@@ -26,4 +27,5 @@ val domainModule = module {
     factoryOf(::AddProductToUserUseCase)
     factoryOf(::SendMessageFCMUseCase)
     factoryOf(::SendNotificationUseCase)
+    factoryOf(::GetAllPartnersForUserUseCase)
 }

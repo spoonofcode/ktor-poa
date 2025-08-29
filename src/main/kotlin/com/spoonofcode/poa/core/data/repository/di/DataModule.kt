@@ -13,4 +13,5 @@ val dataModule = module {
     singleOf(::NotificationRepository)
     singleOf(::UserRepository)
     singleOf(::UserProductsRepository)
+    singleOf(::UserPartnersRepository)
 }
