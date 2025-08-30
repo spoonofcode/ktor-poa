@@ -62,11 +62,11 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
         }
     }
 
-    suspend fun readByOwnerUserId(ownerUserId: Int): List<Product> {
+    suspend fun readByOwnerUserId(userId: Int): List<Product> {
         return dbQuery {
             Products
                 .leftJoin(Users)
-                .selectAll().where { Products.ownerUserId eq ownerUserId }.map {
+                .selectAll().where { Products.ownerUserId eq userId }.map {
                     toResponse(it)
                 }
         }
@@ -85,6 +85,16 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
             Products.update({ Products.id eq productId }) {
                 it[ownerUserId] = userId
             }
+        }
+    }
+
+    suspend fun readUserProductSeriesIds(userId: Int): List<String> {
+        return dbQuery {
+            Products
+                .select(Products.seriesId)
+                .where { Products.ownerUserId eq userId }
+                .withDistinct()
+                .map { it[Products.seriesId] }
         }
     }
 }

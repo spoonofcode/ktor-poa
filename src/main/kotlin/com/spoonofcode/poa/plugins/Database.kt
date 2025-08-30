@@ -355,6 +355,15 @@ private fun getImageLinks(): List<String> = listOf(
     "https://beautysaute.pl/environment/cache/images/750_750_productGfx_259/Bluza-z-kapturem-damska-czarna-ocieplana.webp",
     "https://beautysaute.pl/environment/cache/images/750_750_productGfx_257/bluza-damska-z-kapturem-pudrowy-roz.webp",
     "https://beautysaute.pl/environment/cache/images/750_750_productGfx_262/Bluza-damska-bez-kaptura-czekolada.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_275/wygodny-damski-komplet-dresowy-bez.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_246/Damska-bluza-bez-kaptura-bezowa.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_258/Bluza-damska-bez-kaptura-czarna.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_249/Modna-bluza-damska-bez-kaptura-roz.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_256/bluza-damska-oversize-bezowa.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_260/Bluza-damska-z-kapturem-butelkow-zielen.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_268/bluza-z-kapturem-czekoladowa-damska.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_250/Ocieplne-spodnie-dresowe-damskie-butelkowa-zielen.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_255/Spodnie-dresowe-damskie-czarne-ocieplane.webp",
 )
 
 suspend fun <T> dbQuery(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO) { block() }
