@@ -110,19 +110,6 @@ private fun setExampleData() {
     }
 
     Users.insert {
-        it[firstName] = "Bartosz"
-        it[lastName] = "Luczak"
-        it[nickName] = "Lycha"
-        it[email] = "bartosz.luczak@gmail.com"
-        it[password] = "\$2a\$10\$JvONt8faWClBF4Y5D.9uQO8x2DJDDiVw8VcRwBWmB94tP67WQKNtK"
-    }
-
-    UserRoles.insert {
-        it[userId] = 2
-        it[roleId] = 1
-    }
-
-    Users.insert {
         it[firstName] = "Michal"
         it[lastName] = "Staroszczyk"
         it[email] = "michal.staroszczyk@gmail.com"
@@ -130,7 +117,7 @@ private fun setExampleData() {
     }
 
     UserRoles.insert {
-        it[userId] = 3
+        it[userId] = 2
         it[roleId] = 2
     }
 
@@ -139,11 +126,11 @@ private fun setExampleData() {
         it[lastName] = "Waszkiewicz"
         it[nickName] = "DariaWasz"
         it[email] = "daria.waszkiewicz@gmail.com"
-        it[password] = "\$2a\$10\$0AgsnrhIbbq3e0jWeW.g0.kniIrjjCXWAs81y69hymh.04YJTKmC."
+        it[password] = "\$2a\$12\$gPChtVla1CJtON6BQky1KO34A0nZ2e7JNt/WRgLbYMQFLv/SjpCJq"
     }
 
     UserRoles.insert {
-        it[userId] = 4
+        it[userId] = 3
         it[roleId] = 3
     }
 
@@ -306,10 +293,10 @@ private fun getExpirationDateTime(): LocalDateTime {
 }
 
 fun createProducts() {
-    repeat(10) { index ->
+    repeat(20) { index ->
 
         val productSeriesId = (1..getImageLinks().size).random()
-        val productUserId = getOwnerUserIdOrNull()
+        val productUserId = getOwnerUserId()
 
         Products.insert {
             it[name] = "Product #${index + 1}"
@@ -363,7 +350,9 @@ fun createProductsWithTagWithoutUser()  {
 }
 
 // random: 70% chance of userId, 30% chance of null
-private fun getOwnerUserIdOrNull() = if ((1..10).random() <= 7) (1..4).random() else null
+//private fun getOwnerUserIdOrNull() = if ((1..10).random() <= 7) (1..4).random() else null
+
+private fun getOwnerUserId() = (1..3).random()
 
 private fun getImageLinks(): List<String> = listOf(
     "https://beautysaute.pl/environment/cache/images/750_750_productGfx_261/bluza-damska-z-kapturem-ocieplana-bordo.webp",
