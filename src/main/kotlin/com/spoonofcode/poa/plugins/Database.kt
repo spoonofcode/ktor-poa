@@ -306,7 +306,7 @@ private fun getExpirationDateTime(): LocalDateTime {
 }
 
 fun createProducts() {
-    repeat(200) { index ->
+    repeat(10) { index ->
 
         val productSeriesId = (1..getImageLinks().size).random()
         val productUserId = getOwnerUserIdOrNull()
@@ -327,15 +327,14 @@ fun createProducts() {
 }
 
 fun createProductWithTagWithoutUser()  {
-    val productSeriesId = (1..getImageLinks().size).random()
-
     Products.insert {
         it[name] = "Product 999"
         it[description] = "Przykładowy opis wydarzenia nr 999"
         it[tagId] = "04A971E2E51090" //TAG from the "Money makes money" hat
-        it[seriesId] = productSeriesId.toString()
+        it[seriesId] = "999"
         it[collectionName] = "Collection 1"
-        it[imageLink] = getImageLinks()[productSeriesId - 1]
+        it[imageLink] = "https://i2.seadn.io/polygon/0xc8b0f59f636b72752578a86c0337f1a4f675a40d/a256c49770bbf0ec4458d9ddd35274/e0a256c49770bbf0ec4458d9ddd35274.png"
+        it[videoLink] = "https://raw2.seadn.io/polygon/0xc8b0f59f636b72752578a86c0337f1a4f675a40d/6bbd5b933cec2f1321e49bf9b7d950/de6bbd5b933cec2f1321e49bf9b7d950.mp4"
         it[websiteLink] = "https://proof-of-wear.com/"
         it[customLink] = "https://proof-of-wear.com/"
     }
