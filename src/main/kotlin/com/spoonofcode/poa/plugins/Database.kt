@@ -98,7 +98,7 @@ private fun setExampleData() {
     Users.insert {
         it[firstName] = "Bartosz"
         it[lastName] = "Łuczak"
-        it[nickName] = "Lycha"
+        it[nickName] = "Lycha 5"
         it[email] = "luczak.bartosz5@gmail.com"
         it[provider] = "google"
         it[providerId] = "117628026316806676295"
@@ -148,7 +148,7 @@ private fun setExampleData() {
     }
 
     createProducts()
-    createProductWithTagWithoutUser()
+    createProductsWithTagWithoutUser()
 
     UserProducts.insert {
         it[userId] = 1
@@ -310,12 +310,10 @@ fun createProducts() {
 
         val productSeriesId = (1..getImageLinks().size).random()
         val productUserId = getOwnerUserIdOrNull()
-        val productTagId = getAvaiablePOATagIds().random()
 
         Products.insert {
             it[name] = "Product #${index + 1}"
             it[description] = "Przykładowy opis wydarzenia nr ${index + 1}"
-            it[tagId] = productTagId
             it[seriesId] = productSeriesId.toString()
             it[collectionName] = "Collection 1"
             it[imageLink] = getImageLinks()[productSeriesId - 1]
@@ -326,7 +324,31 @@ fun createProducts() {
     }
 }
 
-fun createProductWithTagWithoutUser()  {
+fun createProductsWithTagWithoutUser()  {
+    Products.insert {
+        it[name] = "Product 997"
+        it[description] = "First unique T-shirt collection by Proof of Wear!"
+        it[tagId] = "043469C2891D91" //TAG from the pendant
+        it[seriesId] = "997"
+        it[collectionName] = "Collection 1"
+        it[imageLink] = "https://i2.seadn.io/polygon/0x96bed0ae3ae5b0f8a2b92a9315981af25080cf9f/1f2918b2f64905471b373fdb21b400/571f2918b2f64905471b373fdb21b400.png"
+        it[videoLink] = "https://raw2.seadn.io/polygon/0x96bed0ae3ae5b0f8a2b92a9315981af25080cf9f/2683651f9f497b89f4209445939631/8c2683651f9f497b89f4209445939631.mp4"
+        it[websiteLink] = "https://proof-of-wear.com/"
+        it[customLink] = "https://proof-of-wear.com/"
+    }
+
+    Products.insert {
+        it[name] = "Product 998"
+        it[description] = "First unique T-shirt collection by Proof of Wear!"
+        it[tagId] = "047AECC2891D90" //TAG from the pendant
+        it[seriesId] = "998"
+        it[collectionName] = "Collection 1"
+        it[imageLink] = "https://i2.seadn.io/polygon/0x052f027da88d0a6a76515346615206d2457efc45/8728bc26abed65e90e83704c77d3e9/618728bc26abed65e90e83704c77d3e9.jpeg"
+        it[videoLink] = "https://raw2.seadn.io/polygon/0x052f027da88d0a6a76515346615206d2457efc45/7d5369795b7750eb22c0841db4d29f/2c7d5369795b7750eb22c0841db4d29f.mp4"
+        it[websiteLink] = "https://proof-of-wear.com/"
+        it[customLink] = "https://proof-of-wear.com/"
+    }
+
     Products.insert {
         it[name] = "Product 999"
         it[description] = "Przykładowy opis wydarzenia nr 999"
@@ -342,11 +364,6 @@ fun createProductWithTagWithoutUser()  {
 
 // random: 70% chance of userId, 30% chance of null
 private fun getOwnerUserIdOrNull() = if ((1..10).random() <= 7) (1..4).random() else null
-
-private fun getAvaiablePOATagIds(): List<String> = listOf(
-    "043469C2891D91",
-    "047AECC2891D90",
-)
 
 private fun getImageLinks(): List<String> = listOf(
     "https://beautysaute.pl/environment/cache/images/750_750_productGfx_261/bluza-damska-z-kapturem-ocieplana-bordo.webp",

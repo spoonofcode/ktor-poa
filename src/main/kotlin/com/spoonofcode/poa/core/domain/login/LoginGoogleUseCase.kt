@@ -19,9 +19,10 @@ class LoginGoogleUseCase(
         // TODO Consider injecting these two
         val transport = ApacheHttpTransport()
         val factory = GsonFactory.getDefaultInstance()
+        val clientId = System.getenv("POA_GOOGLE_CLIENT_ID") // Server client id from google cloud console
 
         val verifier = GoogleIdTokenVerifier.Builder(transport, factory)
-            .setAudience(listOf(System.getenv("POA_GOOGLE_CLIENT_ID"))) // Server client id from google cloud console
+            .setAudience(listOf(clientId))
             .build()
 
         // Verify received token
