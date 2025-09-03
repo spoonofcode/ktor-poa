@@ -1,5 +1,6 @@
 package com.spoonofcode.poa.feature.user
 
+import com.spoonofcode.poa.core.base.routes.CrudOperation
 import com.spoonofcode.poa.core.base.routes.crudRoute
 import com.spoonofcode.poa.core.data.repository.UserRepository
 import com.spoonofcode.poa.core.domain.user.AddProductToUserUseCase
@@ -24,7 +25,8 @@ fun Route.users(
     val basePath = "/users"
     crudRoute(
         basePath = basePath,
-        repository = userRepository
+        repository = userRepository,
+        CrudOperation.Read, CrudOperation.Update,
     )
     route(basePath) {
         get("/{userId}/products") {

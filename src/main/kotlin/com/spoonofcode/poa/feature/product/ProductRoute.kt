@@ -1,5 +1,6 @@
 package com.spoonofcode.poa.feature.product
 
+import com.spoonofcode.poa.core.base.routes.CrudOperation
 import com.spoonofcode.poa.core.base.routes.crudRoute
 import com.spoonofcode.poa.core.data.repository.ProductRepository
 import com.spoonofcode.poa.core.domain.product.GetProductByTagIdUseCase
@@ -18,6 +19,7 @@ fun Route.products(
     crudRoute(
         basePath = basePath,
         repository = productRepository,
+        CrudOperation.Read, CrudOperation.Update, CrudOperation.All,
     )
     route(basePath) {
         param("tagId") {
