@@ -2,17 +2,13 @@ package com.spoonofcode.poa.feature.user
 
 import com.spoonofcode.poa.core.base.routes.crudRoute
 import com.spoonofcode.poa.core.data.repository.UserRepository
-import com.spoonofcode.poa.core.domain.role.AddRoleToUserUseCase
 import com.spoonofcode.poa.core.domain.user.AddProductToUserUseCase
-import com.spoonofcode.poa.core.domain.user.GetAllUsersByRoleIdUseCase
 import com.spoonofcode.poa.core.domain.user.GetUserProductSeriesIdsUseCase
 import com.spoonofcode.poa.core.domain.user.GetUserProductsUseCase
 import com.spoonofcode.poa.core.model.AddProductToUserRequest
-import com.spoonofcode.poa.core.model.AddRoleToUserRequest
 import com.spoonofcode.poa.core.network.ext.safeRespond
 import com.spoonofcode.poa.core.network.ext.withValidBody
 import com.spoonofcode.poa.core.network.ext.withValidParameter
-import com.spoonofcode.poa.core.network.ext.withValidQueryParameter
 import com.spoonofcode.poa.feature.product.ProductResult
 import io.ktor.http.*
 import io.ktor.server.response.*
@@ -21,9 +17,7 @@ import org.koin.ktor.ext.get
 
 fun Route.users(
     userRepository: UserRepository = get(),
-    getAllUsersByRoleIdUseCase: GetAllUsersByRoleIdUseCase = get(),
     getUserProductsUseCase: GetUserProductsUseCase = get(),
-    addRoleToUserUseCase: AddRoleToUserUseCase = get(),
     addProductToUserUseCase: AddProductToUserUseCase = get(),
     getUserProductSeriesIdsUseCase: GetUserProductSeriesIdsUseCase = get(),
 ) {
@@ -33,17 +27,6 @@ fun Route.users(
         repository = userRepository
     )
     route(basePath) {
-        get("") {
-            call.withValidQueryParameter<Int>(
-                paramName = "roleId",
-            ) { roleId ->
-                call.safeRespond {
-                    val usersByRoleId = getAllUsersByRoleIdUseCase(roleId = roleId)
-                    call.respond(HttpStatusCode.OK, usersByRoleId)
-                }
-            }
-        }
-
         get("/{userId}/products") {
             call.withValidParameter(
                 paramName = "userId",
@@ -100,24 +83,6 @@ fun Route.users(
                 call.safeRespond {
                     val userProductSeriesIds = getUserProductSeriesIdsUseCase(userId = userId)
                     call.respond(HttpStatusCode.OK, userProductSeriesIds)
-                }
-            }
-        }
-
-        post("/{userId}/roles") {
-            call.withValidParameter(
-                paramName = "userId",
-                parser = String::toIntOrNull
-            ) { userId ->
-                call.withValidBody<AddRoleToUserRequest> { body ->
-                    call.safeRespond {
-                        val roleId = body.roleId
-                        addRoleToUserUseCase(roleId, userId)
-                        call.respond(
-                            HttpStatusCode.Created,
-                            "Role with id = $roleId added to user with id = $userId."
-                        )
-                    }
                 }
             }
         }

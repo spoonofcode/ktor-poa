@@ -4,15 +4,12 @@ import com.spoonofcode.poa.feature.login.login.login
 import com.spoonofcode.poa.feature.login.login.loginGoogle
 import com.spoonofcode.poa.feature.login.refresh.refresh
 import com.spoonofcode.poa.feature.login.register.register
-import com.spoonofcode.poa.feature.messagefcm.messageFCM
 import com.spoonofcode.poa.feature.notification.notifications
 import com.spoonofcode.poa.feature.partner.partnerCategories
 import com.spoonofcode.poa.feature.partner.partners
 import com.spoonofcode.poa.feature.product.products
 import com.spoonofcode.poa.feature.profile.profile
-import com.spoonofcode.poa.feature.user.userPartners
 import com.spoonofcode.poa.feature.user.users
-import com.spoonofcode.poa.routes.roles
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.http.content.*
@@ -29,16 +26,13 @@ fun Application.configureRouting() {
         login()
         register()
         refresh()
-        messageFCM()
         authenticate("auth-jwt") {
             users()
-            roles()
             partners()
             partnerCategories()
             products()
             profile()
             notifications()
-            userPartners()
         }
     }
 }
