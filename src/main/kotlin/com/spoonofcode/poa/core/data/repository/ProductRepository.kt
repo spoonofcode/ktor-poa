@@ -16,6 +16,8 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
             Products.description to request.description,
             Products.seriesId to request.seriesId,
             Products.collectionName to request.collectionName,
+            Products.imageLink to request.imageLink,
+            Products.videoLink to request.videoLink,
             Products.tagId to request.tagId,
             Products.websiteLink to request.websiteLink,
             Products.customLink to request.customLink,
@@ -34,6 +36,7 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
             seriesId = row[Products.seriesId],
             collectionName = row[Products.collectionName],
             imageLink = row[Products.imageLink],
+            videoLink = row[Products.videoLink],
             tagId = row[Products.tagId],
             websiteLink = row[Products.websiteLink],
             customLink = row[Products.customLink],
@@ -62,11 +65,11 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
         }
     }
 
-    suspend fun readByOwnerUserId(ownerUserId: Int): List<Product> {
+    suspend fun readByOwnerUserId(userId: Int): List<Product> {
         return dbQuery {
             Products
                 .leftJoin(Users)
-                .selectAll().where { Products.ownerUserId eq ownerUserId }.map {
+                .selectAll().where { Products.ownerUserId eq userId }.map {
                     toResponse(it)
                 }
         }
@@ -85,6 +88,16 @@ class ProductRepository : GenericCrudRepository<Products, ProductRequest, Produc
             Products.update({ Products.id eq productId }) {
                 it[ownerUserId] = userId
             }
+        }
+    }
+
+    suspend fun readUserProductSeriesIds(userId: Int): List<String> {
+        return dbQuery {
+            Products
+                .select(Products.seriesId)
+                .where { Products.ownerUserId eq userId }
+                .withDistinct()
+                .map { it[Products.seriesId] }
         }
     }
 }

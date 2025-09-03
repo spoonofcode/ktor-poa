@@ -13,16 +13,15 @@ class SendNotificationUseCase(
         val notification = notificationRepository.create(notificationRequest)
         val data = mapOf(NOTIFICATION_ID_KEY to notification.id.toString())
         with(notificationRequest) {
-            if (seriesIds.isNotEmpty()) {
-                seriesIds.forEach { seriesId ->
-                    FirebaseMessaging.getInstance().send(buildNotificationForSeries(seriesId, data))
-                }
-            }
+            FirebaseMessaging.getInstance().send(buildNotificationForSeries(seriesIds, data))
         }
         return notification
     }
 
-    private fun NotificationRequest.buildNotificationForSeries(seriesId: String, data: Map<String, String>): Message? =
+    private fun NotificationRequest.buildNotificationForSeries(
+        seriesIds: List<String>,
+        data: Map<String, String>
+    ): Message? =
         Message.builder()
             .setNotification(
                 buildNotification(
@@ -31,9 +30,19 @@ class SendNotificationUseCase(
                     imageUrl = imageUrl
                 )
             )
-            .setTopic(seriesId)
+            .apply {
+                if (seriesIds.isEmpty()) {
+                    setCondition("'$GLOBAL_TOPIC' in topics")
+                } else {
+                    setCondition(buildCondition(topics = seriesIds))
+                }
+            }
             .putAllData(data)
             .build()
+
+    private fun buildCondition(topics: List<String>): String {
+        return topics.joinToString(separator = " || ") { "'$it' in topics" }
+    }
 
     private fun buildNotification(
         title: String,
@@ -50,5 +59,6 @@ class SendNotificationUseCase(
 
     private companion object {
         private const val NOTIFICATION_ID_KEY = "notificationId"
+        private const val GLOBAL_TOPIC = "GLOBAL_TOPIC"
     }
 }

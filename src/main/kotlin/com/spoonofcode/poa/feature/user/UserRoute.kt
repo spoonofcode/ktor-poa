@@ -2,10 +2,11 @@ package com.spoonofcode.poa.feature.user
 
 import com.spoonofcode.poa.core.base.routes.crudRoute
 import com.spoonofcode.poa.core.data.repository.UserRepository
-import com.spoonofcode.poa.core.domain.product.GetUserProductsUseCase
 import com.spoonofcode.poa.core.domain.role.AddRoleToUserUseCase
 import com.spoonofcode.poa.core.domain.user.AddProductToUserUseCase
 import com.spoonofcode.poa.core.domain.user.GetAllUsersByRoleIdUseCase
+import com.spoonofcode.poa.core.domain.user.GetUserProductSeriesIdsUseCase
+import com.spoonofcode.poa.core.domain.user.GetUserProductsUseCase
 import com.spoonofcode.poa.core.model.AddProductToUserRequest
 import com.spoonofcode.poa.core.model.AddRoleToUserRequest
 import com.spoonofcode.poa.core.network.ext.safeRespond
@@ -24,6 +25,7 @@ fun Route.users(
     getUserProductsUseCase: GetUserProductsUseCase = get(),
     addRoleToUserUseCase: AddRoleToUserUseCase = get(),
     addProductToUserUseCase: AddProductToUserUseCase = get(),
+    getUserProductSeriesIdsUseCase: GetUserProductSeriesIdsUseCase = get(),
 ) {
     val basePath = "/users"
     crudRoute(
@@ -86,6 +88,18 @@ fun Route.users(
                             )
                         }
                     }
+                }
+            }
+        }
+
+        get("/{userId}/product-series-ids") {
+            call.withValidParameter(
+                paramName = "userId",
+                parser = String::toIntOrNull,
+            ) { userId ->
+                call.safeRespond {
+                    val userProductSeriesIds = getUserProductSeriesIdsUseCase(userId = userId)
+                    call.respond(HttpStatusCode.OK, userProductSeriesIds)
                 }
             }
         }

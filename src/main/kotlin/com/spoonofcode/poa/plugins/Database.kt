@@ -98,7 +98,7 @@ private fun setExampleData() {
     Users.insert {
         it[firstName] = "Bartosz"
         it[lastName] = "Łuczak"
-        it[nickName] = "Lycha"
+        it[nickName] = "Lycha 5"
         it[email] = "luczak.bartosz5@gmail.com"
         it[provider] = "google"
         it[providerId] = "117628026316806676295"
@@ -110,19 +110,6 @@ private fun setExampleData() {
     }
 
     Users.insert {
-        it[firstName] = "Bartosz"
-        it[lastName] = "Luczak"
-        it[nickName] = "Lycha"
-        it[email] = "bartosz.luczak@gmail.com"
-        it[password] = "\$2a\$10\$JvONt8faWClBF4Y5D.9uQO8x2DJDDiVw8VcRwBWmB94tP67WQKNtK"
-    }
-
-    UserRoles.insert {
-        it[userId] = 2
-        it[roleId] = 1
-    }
-
-    Users.insert {
         it[firstName] = "Michal"
         it[lastName] = "Staroszczyk"
         it[email] = "michal.staroszczyk@gmail.com"
@@ -130,7 +117,7 @@ private fun setExampleData() {
     }
 
     UserRoles.insert {
-        it[userId] = 3
+        it[userId] = 2
         it[roleId] = 2
     }
 
@@ -139,16 +126,16 @@ private fun setExampleData() {
         it[lastName] = "Waszkiewicz"
         it[nickName] = "DariaWasz"
         it[email] = "daria.waszkiewicz@gmail.com"
-        it[password] = "\$2a\$10\$0AgsnrhIbbq3e0jWeW.g0.kniIrjjCXWAs81y69hymh.04YJTKmC."
+        it[password] = "\$2a\$12\$gPChtVla1CJtON6BQky1KO34A0nZ2e7JNt/WRgLbYMQFLv/SjpCJq"
     }
 
     UserRoles.insert {
-        it[userId] = 4
+        it[userId] = 3
         it[roleId] = 3
     }
 
     createProducts()
-    createProductWithTagWithoutUser()
+    createProductsWithTagWithoutUser()
 
     UserProducts.insert {
         it[userId] = 1
@@ -306,16 +293,14 @@ private fun getExpirationDateTime(): LocalDateTime {
 }
 
 fun createProducts() {
-    repeat(200) { index ->
+    repeat(20) { index ->
 
         val productSeriesId = (1..getImageLinks().size).random()
-        val productUserId = getOwnerUserIdOrNull()
-        val productTagId = getAvaiablePOATagIds().random()
+        val productUserId = getOwnerUserId()
 
         Products.insert {
             it[name] = "Product #${index + 1}"
             it[description] = "Przykładowy opis wydarzenia nr ${index + 1}"
-            it[tagId] = productTagId
             it[seriesId] = productSeriesId.toString()
             it[collectionName] = "Collection 1"
             it[imageLink] = getImageLinks()[productSeriesId - 1]
@@ -326,28 +311,48 @@ fun createProducts() {
     }
 }
 
-fun createProductWithTagWithoutUser()  {
-    val productSeriesId = (1..getImageLinks().size).random()
+fun createProductsWithTagWithoutUser()  {
+    Products.insert {
+        it[name] = "Product 997"
+        it[description] = "First unique T-shirt collection by Proof of Wear!"
+        it[tagId] = "043469C2891D91" //TAG from the pendant
+        it[seriesId] = "997"
+        it[collectionName] = "Collection 1"
+        it[imageLink] = "https://i2.seadn.io/polygon/0x96bed0ae3ae5b0f8a2b92a9315981af25080cf9f/1f2918b2f64905471b373fdb21b400/571f2918b2f64905471b373fdb21b400.png"
+        it[videoLink] = "https://raw2.seadn.io/polygon/0x96bed0ae3ae5b0f8a2b92a9315981af25080cf9f/2683651f9f497b89f4209445939631/8c2683651f9f497b89f4209445939631.mp4"
+        it[websiteLink] = "https://proof-of-wear.com/"
+        it[customLink] = "https://proof-of-wear.com/"
+    }
+
+    Products.insert {
+        it[name] = "Product 998"
+        it[description] = "First unique T-shirt collection by Proof of Wear!"
+        it[tagId] = "047AECC2891D90" //TAG from the pendant
+        it[seriesId] = "998"
+        it[collectionName] = "Collection 1"
+        it[imageLink] = "https://i2.seadn.io/polygon/0x052f027da88d0a6a76515346615206d2457efc45/8728bc26abed65e90e83704c77d3e9/618728bc26abed65e90e83704c77d3e9.jpeg"
+        it[videoLink] = "https://raw2.seadn.io/polygon/0x052f027da88d0a6a76515346615206d2457efc45/7d5369795b7750eb22c0841db4d29f/2c7d5369795b7750eb22c0841db4d29f.mp4"
+        it[websiteLink] = "https://proof-of-wear.com/"
+        it[customLink] = "https://proof-of-wear.com/"
+    }
 
     Products.insert {
         it[name] = "Product 999"
         it[description] = "Przykładowy opis wydarzenia nr 999"
         it[tagId] = "04A971E2E51090" //TAG from the "Money makes money" hat
-        it[seriesId] = productSeriesId.toString()
+        it[seriesId] = "999"
         it[collectionName] = "Collection 1"
-        it[imageLink] = getImageLinks()[productSeriesId - 1]
+        it[imageLink] = "https://i2.seadn.io/polygon/0xc8b0f59f636b72752578a86c0337f1a4f675a40d/a256c49770bbf0ec4458d9ddd35274/e0a256c49770bbf0ec4458d9ddd35274.png"
+        it[videoLink] = "https://raw2.seadn.io/polygon/0xc8b0f59f636b72752578a86c0337f1a4f675a40d/6bbd5b933cec2f1321e49bf9b7d950/de6bbd5b933cec2f1321e49bf9b7d950.mp4"
         it[websiteLink] = "https://proof-of-wear.com/"
         it[customLink] = "https://proof-of-wear.com/"
     }
 }
 
 // random: 70% chance of userId, 30% chance of null
-private fun getOwnerUserIdOrNull() = if ((1..10).random() <= 7) (1..4).random() else null
+//private fun getOwnerUserIdOrNull() = if ((1..10).random() <= 7) (1..4).random() else null
 
-private fun getAvaiablePOATagIds(): List<String> = listOf(
-    "043469C2891D91",
-    "047AECC2891D90",
-)
+private fun getOwnerUserId() = (1..3).random()
 
 private fun getImageLinks(): List<String> = listOf(
     "https://beautysaute.pl/environment/cache/images/750_750_productGfx_261/bluza-damska-z-kapturem-ocieplana-bordo.webp",
@@ -355,6 +360,15 @@ private fun getImageLinks(): List<String> = listOf(
     "https://beautysaute.pl/environment/cache/images/750_750_productGfx_259/Bluza-z-kapturem-damska-czarna-ocieplana.webp",
     "https://beautysaute.pl/environment/cache/images/750_750_productGfx_257/bluza-damska-z-kapturem-pudrowy-roz.webp",
     "https://beautysaute.pl/environment/cache/images/750_750_productGfx_262/Bluza-damska-bez-kaptura-czekolada.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_275/wygodny-damski-komplet-dresowy-bez.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_246/Damska-bluza-bez-kaptura-bezowa.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_258/Bluza-damska-bez-kaptura-czarna.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_249/Modna-bluza-damska-bez-kaptura-roz.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_256/bluza-damska-oversize-bezowa.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_260/Bluza-damska-z-kapturem-butelkow-zielen.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_268/bluza-z-kapturem-czekoladowa-damska.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_250/Ocieplne-spodnie-dresowe-damskie-butelkowa-zielen.webp",
+    "https://beautysaute.pl/environment/cache/images/0_0_productGfx_255/Spodnie-dresowe-damskie-czarne-ocieplane.webp",
 )
 
 suspend fun <T> dbQuery(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO) { block() }

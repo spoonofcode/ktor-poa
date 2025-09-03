@@ -27,6 +27,7 @@ services:
       DB_USER: ${MYSQL_USER}
       DB_PASSWORD: ${MYSQL_PASSWORD}
       JDBC_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      POA_GOOGLE_CLIENT_ID: ${POA_GOOGLE_CLIENT_ID}
     ports:
       - "8080:8080"
 

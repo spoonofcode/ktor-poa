@@ -1,5 +1,6 @@
 package com.spoonofcode.poa.feature.partner
 
+import com.spoonofcode.poa.core.base.routes.CrudOperation
 import com.spoonofcode.poa.core.base.routes.crudRoute
 import com.spoonofcode.poa.core.data.repository.PartnerCategoryRepository
 import io.ktor.server.routing.*
@@ -11,6 +12,11 @@ fun Route.partnerCategories(
     val basePath = "/partnerCategories"
     crudRoute(
         basePath = basePath,
-        repository = partnerCategoryRepository
+        repository = partnerCategoryRepository,
+        CrudOperation.Read,
+        CrudOperation.All,
+        CrudOperation.Create,
+        CrudOperation.Update,
+        CrudOperation.Delete
     )
 }
