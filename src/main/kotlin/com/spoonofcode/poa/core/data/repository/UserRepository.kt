@@ -3,7 +3,6 @@ package com.spoonofcode.poa.core.data.repository
 import com.spoonofcode.poa.core.base.repository.GenericCrudRepository
 import com.spoonofcode.poa.core.model.User
 import com.spoonofcode.poa.core.model.UserRequest
-import com.spoonofcode.poa.core.model.UserRoles
 import com.spoonofcode.poa.core.model.Users
 import com.spoonofcode.poa.plugins.dbQuery
 import org.jetbrains.exposed.sql.selectAll
@@ -35,13 +34,6 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, User>(
         return dbQuery {
             Users.selectAll().where { Users.email eq email }.map { toResponse(it) }
         }.firstOrNull()
-    }
-
-    suspend fun readAllUserByRoleId(roleId: Int): List<User> {
-        return dbQuery {
-            (Users innerJoin UserRoles)
-                .selectAll().where { UserRoles.roleId eq roleId }.map(toResponse)
-        }
     }
 
     suspend fun readPassword(email: String): String {

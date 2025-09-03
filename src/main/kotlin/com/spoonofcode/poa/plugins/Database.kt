@@ -40,14 +40,10 @@ fun Application.configureDatabases() {
         dropTables()
         SchemaUtils.create(
             Users,
-            Roles,
-            UserRoles,
             Products,
-            UserProducts,
             PartnerCategories,
             Partners,
             Notifications,
-            UserPartners
         )
         setExampleData()
     }
@@ -77,24 +73,15 @@ private fun dropTables() {
     transaction {
         SchemaUtils.drop(
             Users,
-            Roles,
-            UserRoles,
             Products,
-            UserProducts,
             PartnerCategories,
             Partners,
             Notifications,
-            UserPartners
         )
     }
 }
 
 private fun setExampleData() {
-    Roles.insert { it[name] = "ADMIN" }
-    Roles.insert { it[name] = "CLUB_OWNER" }
-    Roles.insert { it[name] = "COACH" }
-    Roles.insert { it[name] = "USER" }
-
     Users.insert {
         it[firstName] = "Bartosz"
         it[lastName] = "Łuczak"
@@ -104,21 +91,11 @@ private fun setExampleData() {
         it[providerId] = "117628026316806676295"
     }
 
-    UserRoles.insert {
-        it[userId] = 1
-        it[roleId] = 1
-    }
-
     Users.insert {
         it[firstName] = "Michal"
         it[lastName] = "Staroszczyk"
         it[email] = "michal.staroszczyk@gmail.com"
         it[password] = "\$2a\$10\$zCx5qtCaWxzP/L6hB3pH6u0wMhvev3WAqokQQ8UcmnYDOI6bNEjS."
-    }
-
-    UserRoles.insert {
-        it[userId] = 2
-        it[roleId] = 2
     }
 
     Users.insert {
@@ -129,23 +106,8 @@ private fun setExampleData() {
         it[password] = "\$2a\$12\$gPChtVla1CJtON6BQky1KO34A0nZ2e7JNt/WRgLbYMQFLv/SjpCJq"
     }
 
-    UserRoles.insert {
-        it[userId] = 3
-        it[roleId] = 3
-    }
-
     createProducts()
     createProductsWithTagWithoutUser()
-
-    UserProducts.insert {
-        it[userId] = 1
-        it[productId] = 1
-    }
-
-    UserProducts.insert {
-        it[userId] = 1
-        it[productId] = 2
-    }
 
     createPartnerCategories()
 
@@ -200,15 +162,6 @@ private fun createPartners() {
         it[facebookLink] = "https://www.instagram.com/proof_of_wear/?igsh=MXMwODNiZW1qNTRlMA%3D%3D#"
         it[youtubeLink] = "https://www.instagram.com/proof_of_wear/?igsh=MXMwODNiZW1qNTRlMA%3D%3D#"
         it[xLink] = "https://x.com/ProofOfWearPOW?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
-    }
-    UserPartners.insert {
-        it[user] = 2
-        it[partner] = 1
-    }
-
-    UserPartners.insert {
-        it[user] = 2
-        it[partner] = 2
     }
 }
 
@@ -311,15 +264,17 @@ fun createProducts() {
     }
 }
 
-fun createProductsWithTagWithoutUser()  {
+fun createProductsWithTagWithoutUser() {
     Products.insert {
         it[name] = "Product 997"
         it[description] = "First unique T-shirt collection by Proof of Wear!"
         it[tagId] = "043469C2891D91" //TAG from the pendant
         it[seriesId] = "997"
         it[collectionName] = "Collection 1"
-        it[imageLink] = "https://i2.seadn.io/polygon/0x96bed0ae3ae5b0f8a2b92a9315981af25080cf9f/1f2918b2f64905471b373fdb21b400/571f2918b2f64905471b373fdb21b400.png"
-        it[videoLink] = "https://raw2.seadn.io/polygon/0x96bed0ae3ae5b0f8a2b92a9315981af25080cf9f/2683651f9f497b89f4209445939631/8c2683651f9f497b89f4209445939631.mp4"
+        it[imageLink] =
+            "https://i2.seadn.io/polygon/0x96bed0ae3ae5b0f8a2b92a9315981af25080cf9f/1f2918b2f64905471b373fdb21b400/571f2918b2f64905471b373fdb21b400.png"
+        it[videoLink] =
+            "https://raw2.seadn.io/polygon/0x96bed0ae3ae5b0f8a2b92a9315981af25080cf9f/2683651f9f497b89f4209445939631/8c2683651f9f497b89f4209445939631.mp4"
         it[websiteLink] = "https://proof-of-wear.com/"
         it[customLink] = "https://proof-of-wear.com/"
     }
@@ -330,8 +285,10 @@ fun createProductsWithTagWithoutUser()  {
         it[tagId] = "047AECC2891D90" //TAG from the pendant
         it[seriesId] = "998"
         it[collectionName] = "Collection 1"
-        it[imageLink] = "https://i2.seadn.io/polygon/0x052f027da88d0a6a76515346615206d2457efc45/8728bc26abed65e90e83704c77d3e9/618728bc26abed65e90e83704c77d3e9.jpeg"
-        it[videoLink] = "https://raw2.seadn.io/polygon/0x052f027da88d0a6a76515346615206d2457efc45/7d5369795b7750eb22c0841db4d29f/2c7d5369795b7750eb22c0841db4d29f.mp4"
+        it[imageLink] =
+            "https://i2.seadn.io/polygon/0x052f027da88d0a6a76515346615206d2457efc45/8728bc26abed65e90e83704c77d3e9/618728bc26abed65e90e83704c77d3e9.jpeg"
+        it[videoLink] =
+            "https://raw2.seadn.io/polygon/0x052f027da88d0a6a76515346615206d2457efc45/7d5369795b7750eb22c0841db4d29f/2c7d5369795b7750eb22c0841db4d29f.mp4"
         it[websiteLink] = "https://proof-of-wear.com/"
         it[customLink] = "https://proof-of-wear.com/"
     }
@@ -342,8 +299,10 @@ fun createProductsWithTagWithoutUser()  {
         it[tagId] = "04A971E2E51090" //TAG from the "Money makes money" hat
         it[seriesId] = "999"
         it[collectionName] = "Collection 1"
-        it[imageLink] = "https://i2.seadn.io/polygon/0xc8b0f59f636b72752578a86c0337f1a4f675a40d/a256c49770bbf0ec4458d9ddd35274/e0a256c49770bbf0ec4458d9ddd35274.png"
-        it[videoLink] = "https://raw2.seadn.io/polygon/0xc8b0f59f636b72752578a86c0337f1a4f675a40d/6bbd5b933cec2f1321e49bf9b7d950/de6bbd5b933cec2f1321e49bf9b7d950.mp4"
+        it[imageLink] =
+            "https://i2.seadn.io/polygon/0xc8b0f59f636b72752578a86c0337f1a4f675a40d/a256c49770bbf0ec4458d9ddd35274/e0a256c49770bbf0ec4458d9ddd35274.png"
+        it[videoLink] =
+            "https://raw2.seadn.io/polygon/0xc8b0f59f636b72752578a86c0337f1a4f675a40d/6bbd5b933cec2f1321e49bf9b7d950/de6bbd5b933cec2f1321e49bf9b7d950.mp4"
         it[websiteLink] = "https://proof-of-wear.com/"
         it[customLink] = "https://proof-of-wear.com/"
     }

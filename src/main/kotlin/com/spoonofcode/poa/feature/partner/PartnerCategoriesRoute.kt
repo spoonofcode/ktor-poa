@@ -13,10 +13,6 @@ fun Route.partnerCategories(
     crudRoute(
         basePath = basePath,
         repository = partnerCategoryRepository,
-        CrudOperation.Read,
         CrudOperation.All,
-        CrudOperation.Create,
-        CrudOperation.Update,
-        CrudOperation.Delete
     )
 }

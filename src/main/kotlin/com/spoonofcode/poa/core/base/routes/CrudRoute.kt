@@ -34,10 +34,6 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
                 ) { itemId ->
                     call.safeRespond {
                         val item = repository.read(itemId)
-
-                        // TODO SPRWDZ CZEMU TEN ITEM nie dziala
-
-                        println("item = $item")
                         if (item != null) {
                             call.respond(HttpStatusCode.OK, item)
                         } else {
